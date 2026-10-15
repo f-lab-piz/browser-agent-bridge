@@ -1,0 +1,57 @@
+[
+  {
+    "name": "setup",
+    "code": "const browser=await agent.browsers.get(\"chrome\"); const tab=await browser.tabs.new();",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "undefined"
+      }
+    ]
+  },
+  {
+    "name": "tab.content.exportGsuite",
+    "code": "await tab.goto(\"https://docs.google.com/document/d/13AqyUalAwMxgwdANpVom4fHqEvm1T9soHVrp7DO2-Do/edit\"); await tab.playwright.waitForLoadState({state:\"load\",timeoutMs:15000}); nodeRepl.write(await tab.content.exportGsuite(\"pdf\"));",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "/var/folders/gb/js_43wns2yvb50bbf33l04y00000gn/T/browser-use/exports/Blank Google Document-69dfcea5-a7e4-4118-bad1-dac91e51b4ea.pdf"
+      }
+    ]
+  },
+  {
+    "name": "tab.content.exportYouTubeTranscript",
+    "code": "await tab.goto(\"https://www.youtube.com/watch?v=iG9CE55wbtY\"); await tab.playwright.waitForLoadState({state:\"load\",timeoutMs:15000}); nodeRepl.write(await tab.content.exportYouTubeTranscript());",
+    "status": "ERROR",
+    "output": [
+      {
+        "type": "text",
+        "text": "Error: No transcript is available for this YouTube video\n    at file:///Users/kihoon/Documents/Codex/2026-10-01-mcp/browser-agent-bridge/.cache/sdk/fcdece4affce0fa27aa0b0d7acacbffa557df33bebd183a13aff23bf6585ee2a/original-runtime.mjs:1247:24472\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)\n    at async Ct.send (file:///Users/kihoon/Documents/Codex/2026-10-01-mcp/browser-agent-bridge/.cache/sdk/fcdece4affce0fa27aa0b0d7acacbffa557df33bebd183a13aff23bf6585ee2a/original-client.mjs:9:11475)\n    at async ot.exportYouTubeTranscript (file:///Users/kihoon/Documents/Codex/2026-10-01-mcp/browser-agent-bridge/.cache/sdk/fcdece4affce0fa27aa0b0d7acacbffa557df33bebd183a13aff23bf6585ee2a/original-client.mjs:8:17557)\n    at async <anonymous>:1:150"
+      }
+    ]
+  },
+  {
+    "name": "beforeUnloadDialog.dismiss observation",
+    "code": "await tab.goto(\"http://127.0.0.1:29653/unload.html\"); await tab.playwright.getByRole(\"button\",{name:\"Arm\",exact:true}).click(); await tab.playwright.getByRole(\"button\",{name:\"Leave delayed\",exact:true}).click(); await tab.playwright.waitForTimeout(900); nodeRepl.write({url:await tab.url(),dialog:await tab.getJsDialog()});",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "{\"url\":\"http://127.0.0.1:29653/next.html\"}"
+      }
+    ]
+  },
+  {
+    "name": "cleanup",
+    "code": "await tab.close();",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "undefined"
+      }
+    ]
+  }
+]

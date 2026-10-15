@@ -1,0 +1,9 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"reconnected\":true,\"browserCount\":1,\"profileName\":\"Disposable test Chrome reconnected\",\"axLength\":1939}"
+    }
+  ],
+  "isError": false
+}

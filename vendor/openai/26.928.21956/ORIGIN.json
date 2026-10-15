@@ -1,0 +1,188 @@
+{
+  "app": "/Applications/ChatGPT.app",
+  "version": "26.928.21956",
+  "copiedOn": "2026-10-15",
+  "purpose": "User-authorized private compatibility research",
+  "files": [
+    {
+      "file": "bind_tab.d.ts",
+      "bytes": 95,
+      "sha256": "ec5e233ef4d0044d8cd6914f8b91a8ea708177b5354455d978411bd1e77c2bde"
+    },
+    {
+      "file": "bind_tab.js",
+      "bytes": 1996,
+      "sha256": "df87395f8a0c317a051f68657af79acccc84905b5c825e8f9c63ec8a797de2db"
+    },
+    {
+      "file": "browser-accessibility.wasm.br",
+      "bytes": 4084148,
+      "sha256": "97d2773f1f0d3f890e2dc8bbf7da5745cfb9c2686d893579ffc35bb9608185ee"
+    },
+    {
+      "file": "browser-client.mjs",
+      "bytes": 169286,
+      "sha256": "9c76ccc49ffef8d9082989e5c022f50a57d189fc84f1a12ce31678bde2f85367"
+    },
+    {
+      "file": "browser-service.mjs",
+      "bytes": 1442081,
+      "sha256": "224fbda29b80a7ad4801ea45ecb7d41893a92ace15a445527af738d30dbaec33"
+    },
+    {
+      "file": "docs/accessibility.md",
+      "bytes": 4939,
+      "sha256": "c0722e52ccd697b5622c1cd145ffde97ba1f096eeaf0b0f09a9e2be76e03e3f3"
+    },
+    {
+      "file": "docs/api-use-behavior.md",
+      "bytes": 3800,
+      "sha256": "cbdeb4d51517fbc8f59a995123c17ebadac7097f45ecf6514eb97352fafb8f25"
+    },
+    {
+      "file": "docs/api.json",
+      "bytes": 65815,
+      "sha256": "928fe167327781a5f6ebfa0b342b8e0788d9cf6a13fc06c78661d54230f27278"
+    },
+    {
+      "file": "docs/bootstrap-troubleshooting.md",
+      "bytes": 680,
+      "sha256": "bbf69be0ecff6b45e70a71d96487a6932426b3377df389ec7376107e8c1e0416"
+    },
+    {
+      "file": "docs/browser-control-interruption.md",
+      "bytes": 345,
+      "sha256": "2fd73066304bc822ce3fba35eeba6456a0505f32f2f1364424639a08e49d1d5a"
+    },
+    {
+      "file": "docs/browser-safety.md",
+      "bytes": 3319,
+      "sha256": "1d34bbfd82e75deaeaac667eed6c4df211568a358d9e99d94f4d444614964da8"
+    },
+    {
+      "file": "docs/browser-troubleshooting.md",
+      "bytes": 928,
+      "sha256": "76ca57503fc2b11c602ad090326b6f0fec2d037826ec828607945f4c333b206b"
+    },
+    {
+      "file": "docs/capabilities/browser/management.md",
+      "bytes": 5843,
+      "sha256": "c7718517d2e1db86b07f9b26e9f66c268e6f0e632ec2e204ec945c4cb2bd353e"
+    },
+    {
+      "file": "docs/capabilities/browser/viewport.md",
+      "bytes": 1014,
+      "sha256": "c9857bf5aae8bfc73630751363ce27204792b88b1cd95d4da19c03833501921a"
+    },
+    {
+      "file": "docs/capabilities/browser/visibility.md",
+      "bytes": 888,
+      "sha256": "8cb1588084cd3372ffc78b8c500dfa2f359d8a63a3c250f014fd55fad7336b08"
+    },
+    {
+      "file": "docs/capabilities/tab/botDetection.md",
+      "bytes": 2675,
+      "sha256": "d877fab6b7b7cd78c06553dba44a3790361afc85c9e2bb7566e476a3ee0d081e"
+    },
+    {
+      "file": "docs/capabilities/tab/browserAuth.md",
+      "bytes": 21177,
+      "sha256": "00348eb0a343b0fee89f767681f8c0fe823c248b4614cdf99259e09ec2721624"
+    },
+    {
+      "file": "docs/capabilities/tab/cdp.md",
+      "bytes": 2232,
+      "sha256": "8e4d8cc937b7213d9c946f082762e31ece226b05ff42e49e535841c7209ac9a6"
+    },
+    {
+      "file": "docs/capabilities/tab/pageAssets.md",
+      "bytes": 1870,
+      "sha256": "ad83feacb9f30e12d779ff45b235026379290226878b99a01222e0d2d98bdde4"
+    },
+    {
+      "file": "docs/capabilities/tab/webmcp.md",
+      "bytes": 341,
+      "sha256": "02326ba566c5446c8e642fc98ac7aae3044c46d48432272d81b7c7e164d42beb"
+    },
+    {
+      "file": "docs/chrome-file-upload-troubleshooting.md",
+      "bytes": 696,
+      "sha256": "fe75442ac53d6a0fe5e45712e86d2ab0d40318b113d0c74121f4bb84e9460182"
+    },
+    {
+      "file": "docs/chrome-troubleshooting.md",
+      "bytes": 5015,
+      "sha256": "70b27f1b1331e81653b0bcb0c84b91ee7e884304bb7a2c6d5df60133df482580"
+    },
+    {
+      "file": "docs/confirmations.md",
+      "bytes": 5812,
+      "sha256": "5897041e3b121ac9193d69eac9d46e74c4eb3a77a5aa5f0e2dd06c0d5d22a458"
+    },
+    {
+      "file": "docs/documents.json",
+      "bytes": 3899,
+      "sha256": "9f7443b6201e50c7764cf1db64cfca492772f7eafb8692b9346babf457b8f321"
+    },
+    {
+      "file": "docs/file-uploads.md",
+      "bytes": 960,
+      "sha256": "be58df64881903636d16bb11f65e98c8e77f34b82a2d27566df320284c9d37f6"
+    },
+    {
+      "file": "docs/local-web-development.md",
+      "bytes": 346,
+      "sha256": "0bc8a4455b4469e17bd4cfd5192d90d079fcaa9894fbd763552281117535a32c"
+    },
+    {
+      "file": "docs/mcp-apps.md",
+      "bytes": 1217,
+      "sha256": "b7d4fd0fb0a93f95bf9323fdfabf98bd76a68815d850b978391a9c282c057ae5"
+    },
+    {
+      "file": "docs/screenshots.md",
+      "bytes": 576,
+      "sha256": "e157ebeed24968438fa8ae6150e2c5c82b11e51bac6a3cfb214220dba4929bb7"
+    },
+    {
+      "file": "docs/session-naming.md",
+      "bytes": 274,
+      "sha256": "385cfcc20ff5778b81c59f218152381f65c9fd4ad0970bb59c847a009726a003"
+    },
+    {
+      "file": "docs/tab-claiming-chrome.md",
+      "bytes": 2170,
+      "sha256": "9cd2b24253ff7376e317f39cac4dd8ba276ea2a98385d9d3f7f12349ba5706aa"
+    },
+    {
+      "file": "docs/tab-cleanup-chrome.md",
+      "bytes": 1104,
+      "sha256": "d20b4073125929f2b61960b1513ecd9e0fb261c88a4d8077e34f22520e7a1de8"
+    },
+    {
+      "file": "docs/tab-cleanup-iab.md",
+      "bytes": 505,
+      "sha256": "23593b4f6d3828ffbbd88bb8322c8c135957d5d01c219b7e431478c565772b74"
+    },
+    {
+      "file": "docs/tab-mentions-iab.md",
+      "bytes": 1319,
+      "sha256": "10a36c2bd1b856c1b594fc36b5280f2cad5391be971ba8a5b834924fa76763cb"
+    },
+    {
+      "file": "docs/visibility.md",
+      "bytes": 601,
+      "sha256": "7cb1870c425f6b80521722fe5091a76328d53c41bca69705277231e815610ed0"
+    },
+    {
+      "file": "docs/webmcp.md",
+      "bytes": 527,
+      "sha256": "58222da9e228ef36bed3c293daee5cb62e9c3040fe8e017a7608e462c1c44dfc"
+    },
+    {
+      "file": "provenance.json",
+      "bytes": 831,
+      "sha256": "be6bdeb433c1f6b482ca355d7e1f12fdd9ed9df0321a0a7111b1acdd1f7a26d7"
+    }
+  ]
+}

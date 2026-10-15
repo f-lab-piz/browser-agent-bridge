@@ -1,0 +1,17 @@
+{
+  "source": "Installed original Chrome extension",
+  "version": "1.26.901.11451",
+  "copiedOn": "2026-10-15",
+  "files": [
+    {
+      "file": "background.js",
+      "bytes": 355753,
+      "sha256": "83b7b7708ab82ecc9aa2ccad20a2167941a706b38a9467dee0bb124d13f0033e"
+    },
+    {
+      "file": "manifest.json",
+      "bytes": 2739,
+      "sha256": "43c407d46765d3f85754a516b4500b7f491c067548456ba211fa82fca5bd209b"
+    }
+  ]
+}

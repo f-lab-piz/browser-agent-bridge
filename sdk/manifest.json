@@ -1,0 +1,26 @@
+{
+  "version": "26.928.21956-adapter.1",
+  "entry": "browser.mjs",
+  "files": {
+    "browser.mjs": {
+      "bytes": 12741,
+      "sha256": "e24e212bc5ea8db95bcc5ad25bae4e39c6716ab9debf92be33ac37e8b2494169"
+    },
+    "original-runtime.mjs": {
+      "bytes": 1442521,
+      "sha256": "068d608bab358b38faaa1a523a8d788365181d362d8b86a15d8896da8e1e4f21"
+    },
+    "original-client.mjs": {
+      "bytes": 169325,
+      "sha256": "61309b86df355766c37ea2ff76e7584d12254f73a348668e24c4f7f77bf839e7"
+    },
+    "browser-accessibility.wasm.br": {
+      "bytes": 4084148,
+      "sha256": "97d2773f1f0d3f890e2dc8bbf7da5745cfb9c2686d893579ffc35bb9608185ee"
+    },
+    "api.json": {
+      "bytes": 65815,
+      "sha256": "928fe167327781a5f6ebfa0b342b8e0788d9cf6a13fc06c78661d54230f27278"
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "inspected_on": "2026-10-15",
+  "app": "/Applications/ChatGPT.app",
+  "version": "26.928.21956",
+  "rea_version": "6.5.0",
+  "rea_git_commit": "d69acc3455c33f90a2fc4381db43d38b6af50622",
+  "node": "22.21.1",
+  "wabt": "1.0.42",
+  "files": [
+    {
+      "path": "rea-getax-investigation/target/browser-service.mjs",
+      "bytes": 1442081,
+      "sha256": "224fbda29b80a7ad4801ea45ecb7d41893a92ace15a445527af738d30dbaec33"
+    },
+    {
+      "path": "rea-getax-investigation/target/browser-accessibility.wasm.br",
+      "bytes": 4084148,
+      "sha256": "97d2773f1f0d3f890e2dc8bbf7da5745cfb9c2686d893579ffc35bb9608185ee"
+    },
+    {
+      "path": "rea-getax-investigation/target/browser-accessibility.wasm",
+      "bytes": 20208690,
+      "sha256": "489ab336ff6956ff66af93ad997e75f3d29fad395bc06e10afb1d68c60fec346"
+    }
+  ]
+}

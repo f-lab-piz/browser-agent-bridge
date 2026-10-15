@@ -1,0 +1,390 @@
+[
+  {
+    "name": "setup",
+    "code": "const browser=await agent.browsers.get(\"chrome\"); const tab=await browser.tabs.new(); await tab.goto(\"http://127.0.0.1:29653/\"); await tab.playwright.waitForLoadState({state:\"load\"});",
+    "status": "SUCCESS",
+    "expectedError": false,
+    "output": [
+      {
+        "type": "text",
+        "text": "undefined"
+      }
+    ]
+  },
+  {
+    "name": "browser.history",
+    "code": "nodeRepl.write(await browser.history({queries:[\"127.0.0.1:29653\"],limit:3}));",
+    "status": "SUCCESS",
+    "expectedError": false,
+    "output": [
+      {
+        "type": "text",
+        "text": "[{\"url\":\"http://127.0.0.1:29653/\",\"title\":\"Browser Tool Audit\",\"dateVisited\":\"2026-10-15T03:39:28.074Z\"},{\"url\":\"http://127.0.0.1:29653/next.html\",\"title\":\"Audit Next\",\"dateVisited\":\"2026-10-15T03:38:54.505Z\"},{\"url\":\"http://127.0.0.1:29653/unload.html\",\"title\":\"Audit unload\",\"dateVisited\":\"2026-10-15T03:35:05.027Z\"}]"
+      }
+    ]
+  },
+  {
+    "name": "browser.nameSession",
+    "code": "await browser.nameSession(\"Bridge extra audit\");",
+    "status": "SUCCESS",
+    "expectedError": false,
+    "output": [
+      {
+        "type": "text",
+        "text": "undefined"
+      }
+    ]
+  },
+  {
+    "name": "browser.tabs.get",
+    "code": "nodeRepl.write((await browser.tabs.get(tab.id)).id);",
+    "status": "SUCCESS",
+    "expectedError": false,
+    "output": [
+      {
+        "type": "text",
+        "text": "16092799"
+      }
+    ]
+  },
+  {
+    "name": "browser.tabs.selected",
+    "code": "nodeRepl.write((await browser.tabs.selected())?.id);",
+    "status": "SUCCESS",
+    "expectedError": false,
+    "output": [
+      {
+        "type": "text",
+        "text": "16092764"
+      }
+    ]
+  },
+  {
+    "name": "browser.user.claimTab",
+    "code": "nodeRepl.write((await browser.user.claimTab(tab.id)).id);",
+    "status": "SUCCESS",
+    "expectedError": false,
+    "output": [
+      {
+        "type": "text",
+        "text": "16092799"
+      }
+    ]
+  },
+  {
+    "name": "agent.documentation.get",
+    "code": "nodeRepl.write((await agent.documentation.get(\"accessibility\")).slice(0,120));",
+    "status": "SUCCESS",
+    "expectedError": false,
+    "output": [
+      {
+        "type": "text",
+        "text": "# Accessibility\nUse the accessibility API (`ax` property on `Tab` objects) as the primary way to inspect and interact wi"
+      }
+    ]
+  },
+  {
+    "name": "cua.listBrowsers",
+    "code": "nodeRepl.write(await cua.listBrowsers());",
+    "status": "SUCCESS",
+    "expectedError": false,
+    "output": [
+      {
+        "type": "text",
+        "text": "[{\"id\":\"4e8b361c-7fc1-45f6-bf31-e4dc7e9cb0f9\",\"name\":\"Browser Agent Chrome\",\"type\":\"extension\",\"family\":\"chrome\",\"profileName\":\"Disposable test Chrome\",\"metadata\":{\"extensionInstanceId\":\"4e8b361c-7fc1-45f6-bf31-e4dc7e9cb0f9\"},\"apiSupportOverrides\":{\"Tab.ax\":true},\"capabilities\":{\"browser\":[{\"id\":\"viewport\"},{\"id\":\"visibility\"}],\"tab\":[{\"id\":\"pageAssets\"},{\"id\":\"webmcp\"}]}}]"
+      }
+    ]
+  },
+  {
+    "name": "cua.getBrowser",
+    "code": "nodeRepl.write((await cua.getBrowser({url:\"http://127.0.0.1:29653/\"})).browserId);",
+    "status": "SUCCESS",
+    "expectedError": false,
+    "output": [
+      {
+        "type": "text",
+        "text": "4e8b361c-7fc1-45f6-bf31-e4dc7e9cb0f9"
+      }
+    ]
+  },
+  {
+    "name": "cua.listTabs",
+    "code": "nodeRepl.write(await cua.listTabs());",
+    "status": "SUCCESS",
+    "expectedError": false,
+    "output": [
+      {
+        "type": "text",
+        "text": "[{\"id\":\"16092764\",\"providerTabId\":\"16092764\",\"url\":\"http://127.0.0.1:29653/\",\"title\":\"Browser Tool Audit\",\"browserId\":\"4e8b361c-7fc1-45f6-bf31-e4dc7e9cb0f9\"},{\"id\":\"16092799\",\"providerTabId\":\"16092799\",\"url\":\"http://127.0.0.1:29653/\",\"title\":\"Browser Tool Audit\",\"browserId\":\"4e8b361c-7fc1-45f6-bf31-e4dc7e9cb0f9\"}]"
+      }
+    ]
+  },
+  {
+    "name": "cua.getState",
+    "code": "nodeRepl.write(await cua.getState());",
+    "status": "SUCCESS",
+    "expectedError": false,
+    "output": [
+      {
+        "type": "text",
+        "text": "{\"apps\":[],\"browsers\":[{\"id\":\"4e8b361c-7fc1-45f6-bf31-e4dc7e9cb0f9\",\"name\":\"Browser Agent Chrome\",\"type\":\"extension\",\"family\":\"chrome\",\"profileName\":\"Disposable test Chrome\",\"metadata\":{\"extensionInstanceId\":\"4e8b361c-7fc1-45f6-bf31-e4dc7e9cb0f9\"},\"apiSupportOverrides\":{\"Tab.ax\":true},\"capabilities\":{\"browser\":[{\"id\":\"viewport\"},{\"id\":\"visibility\"}],\"tab\":[{\"id\":\"pageAssets\"},{\"id\":\"webmcp\"}]},\"tabs\":[{\"id\":\"16092764\",\"providerTabId\":\"16092764\",\"url\":\"http://127.0.0.1:29653/\",\"title\":\"Browser Tool Audit\",\"browserId\":\"4e8b361c-7fc1-45f6-bf31-e4dc7e9cb0f9\"},{\"id\":\"16092799\",\"providerTabId\":\"16092799\",\"url\":\"http://127.0.0.1:29653/\",\"title\":\"Browser Tool Audit\",\"browserId\":\"4e8b361c-7fc1-45f6-bf31-e4dc7e9cb0f9\"}]}]}"
+      }
+    ]
+  },
+  {
+    "name": "cua.getTab",
+    "code": "nodeRepl.write((await cua.getTab(tab.id,{browser:\"chrome\"})).id);",
+    "status": "SUCCESS",
+    "expectedError": false,
+    "output": [
+      {
+        "type": "text",
+        "text": "Browser tab: 16092799, Title: \"Browser Tool Audit\", URL: \"http://127.0.0.1:29653/\".\n0 AXWebArea Browser Tool Audit, URL: 127.0.0.1:29653/\n\t1 heading Browser Tool Audit, Value: 1\n\t\t2 text Browser Tool Audit\n\t3 text 로컬 테스트 페이지 · 계정/결제 없음\n\t4 container\n\t\t5 text Name\n\t\t6 text field (settable) Description: Name, ID: name\n\t\t7 text Notes\n\t\t8 text entry area (settable) Description: Notes, Value: initial notes\n\t\t9 checkbox (settable, integer) Description: Agree, Value: 0\n\t\t10 text Agree\n\t\t11 pop up button (collapsed, settable) Description: Choice, Value: Alpha, Secondary Actions: Expand\n\t\t\t12 menu\n\t\t\t\t13 (selected) Alpha\n\t\t\t\t14 Beta\n\t\t15 button Increment, ID: increment\n\t\t16 text 0\n\t\t17 button (disabled) Disabled\n\t\t18 button Next page, ID: nav\n\t19 container\n\t\t20 content list items\n\t\t\t21 container\n\t\t\t\t22 AXListMarker • \n\t\t\t\t23 text Apple\n\t\t\t24 container\n\t\t\t\t25 AXListMarker • \n\t\t\t\t26 text Banana\n\t\t\t27 container\n\t\t\t\t28 AXListMarker • \n\t\t\t\t29 text Carrot\n\t\t30 button (collapsed) Details, Secondary Actions: Expand\n\t\t\t31 text Details\n\t32 container\n\t\t33 button Alert\n\t\t34 button Confirm\n\t\t35 button Prompt\n\t\t36 button Arm beforeunload\n\t\t37 text none\n\t38 container\n\t\t39 button Upload single\n\t\t40 button Upload multiple\n\t\t41 text none\n\t\t42 link Description: Download sample, Value: 127.0.0.1:29653/sample.txt, ID: download\n\t\t43 link Description: Download image, Value: 127.0.0.1:29653/pixel.png, ID: image-download\n\t\t44 image Audit pixel\n\t45 container\n\t\t46 text Drag me\n\t\t47 text Drop here\n\t\t48 text none\n\t\t49 container Audit frame\n\t\t\t50 AXWebArea Audit frame, URL: 127.0.0.1:29653/frame.html\n\t\t\t\t51 button Frame button\n\t\t\t\t52 container\n\t\t\t\t\t53 text Frame name\n\t\t\t\t\t54 text field (settable) Frame name\n\t\t\t\t55 text Frame text\n\t\t\t\t56 container Nested frame\n\t\t\t\t\t57 AXWebArea 127.0.0.1:29653/nested.html\n\t\t\t\t\t\t58 text Nested text\n\t59 button Bottom button, ID: bottom\n\nThe focused UI element is 0 AXWebArea Browser Tool Audit, URL: 127.0.0.1:29653/"
+      },
+      {
+        "type": "text",
+        "text": "16092799"
+      }
+    ]
+  },
+  {
+    "name": "cua.createBrowserTab",
+    "code": "const facadeTab=await cua.createBrowserTab(\"chrome\",\"http://127.0.0.1:29653/next.html\",{visible:true}); await facadeTab.close();",
+    "status": "SUCCESS",
+    "expectedError": false,
+    "output": [
+      {
+        "type": "text",
+        "text": "Browser tab: 16092800, Title: \"Audit Next\", URL: \"http://127.0.0.1:29653/next.html\".\n0 AXWebArea Audit Next, URL: 127.0.0.1:29653/next.html\n\t1 heading Audit Next, Value: 1\n\t\t2 text Audit Next\n\t3 link Description: Back to fixture, Value: 127.0.0.1:29653/index.html\n\nThe focused UI element is 0 AXWebArea Audit Next, URL: 127.0.0.1:29653/next.html"
+      }
+    ]
+  },
+  {
+    "name": "AX full before actions",
+    "code": "var ax=await tab.getAXState({emit:false,disableDiffing:true}); nodeRepl.write(ax);",
+    "status": "SUCCESS",
+    "expectedError": false,
+    "output": [
+      {
+        "type": "text",
+        "text": "Browser tab: 16092799, Title: \"Browser Tool Audit\", URL: \"http://127.0.0.1:29653/\".\n0 AXWebArea Browser Tool Audit, URL: 127.0.0.1:29653/\n\t1 heading Browser Tool Audit, Value: 1\n\t\t2 text Browser Tool Audit\n\t3 text 로컬 테스트 페이지 · 계정/결제 없음\n\t4 container\n\t\t5 text Name\n\t\t6 text field (settable) Description: Name, ID: name\n\t\t7 text Notes\n\t\t8 text entry area (settable) Description: Notes, Value: initial notes\n\t\t9 checkbox (settable, integer) Description: Agree, Value: 0\n\t\t10 text Agree\n\t\t11 pop up button (collapsed, settable) Description: Choice, Value: Alpha, Secondary Actions: Expand\n\t\t\t12 menu\n\t\t\t\t13 (selected) Alpha\n\t\t\t\t14 Beta\n\t\t15 button Increment, ID: increment\n\t\t16 text 0\n\t\t17 button (disabled) Disabled\n\t\t18 button Next page, ID: nav\n\t19 container\n\t\t20 content list items\n\t\t\t21 container\n\t\t\t\t22 AXListMarker • \n\t\t\t\t23 text Apple\n\t\t\t24 container\n\t\t\t\t25 AXListMarker • \n\t\t\t\t26 text Banana\n\t\t\t27 container\n\t\t\t\t28 AXListMarker • \n\t\t\t\t29 text Carrot\n\t\t30 button (collapsed) Details, Secondary Actions: Expand\n\t\t\t31 text Details\n\t32 container\n\t\t33 button Alert\n\t\t34 button Confirm\n\t\t35 button Prompt\n\t\t36 button Arm beforeunload\n\t\t37 text none\n\t38 container\n\t\t39 button Upload single\n\t\t40 button Upload multiple\n\t\t41 text none\n\t\t42 link Description: Download sample, Value: 127.0.0.1:29653/sample.txt, ID: download\n\t\t43 link Description: Download image, Value: 127.0.0.1:29653/pixel.png, ID: image-download\n\t\t44 image Audit pixel\n\t45 container\n\t\t46 text Drag me\n\t\t47 text Drop here\n\t\t48 text none\n\t\t49 container Audit frame\n\t\t\t50 AXWebArea Audit frame, URL: 127.0.0.1:29653/frame.html\n\t\t\t\t51 button Frame button\n\t\t\t\t52 container\n\t\t\t\t\t53 text Frame name\n\t\t\t\t\t54 text field (settable) Frame name\n\t\t\t\t55 text Frame text\n\t\t\t\t56 container Nested frame\n\t\t\t\t\t57 AXWebArea 127.0.0.1:29653/nested.html\n\t\t\t\t\t\t58 text Nested text\n\t59 button Bottom button, ID: bottom\n\nThe focused UI element is 0 AXWebArea Browser Tool Audit, URL: 127.0.0.1:29653/"
+      }
+    ]
+  },
+  {
+    "name": "tab.setValue",
+    "code": "var nameId=Number(ax.match(/(\\d+) text field[^\\n]*Description: Name,/)[1]); await tab.setValue(nameId,\"original typed\");",
+    "status": "SUCCESS",
+    "expectedError": false,
+    "output": [
+      {
+        "type": "text",
+        "text": "undefined"
+      }
+    ]
+  },
+  {
+    "name": "tab.selectText",
+    "code": "await tab.getAXState({emit:false}); await tab.selectText(nameId,\"typed\");",
+    "status": "SUCCESS",
+    "expectedError": false,
+    "output": [
+      {
+        "type": "text",
+        "text": "undefined"
+      }
+    ]
+  },
+  {
+    "name": "tab.paste",
+    "code": "await tab.getAXState({emit:false}); await tab.paste(nameId,\"pasted\",{format:\"text\"});",
+    "status": "SUCCESS",
+    "expectedError": false,
+    "output": [
+      {
+        "type": "text",
+        "text": "undefined"
+      }
+    ]
+  },
+  {
+    "name": "tab.pressKey",
+    "code": "await tab.getAXState({emit:false}); await tab.pressKey(nameId,\"End\");",
+    "status": "SUCCESS",
+    "expectedError": false,
+    "output": [
+      {
+        "type": "text",
+        "text": "undefined"
+      }
+    ]
+  },
+  {
+    "name": "tab.typeText",
+    "code": "await tab.getAXState({emit:false}); await tab.typeText(nameId,\" added\"); nodeRepl.write(await tab.playwright.evaluate(()=>document.querySelector(\"#name\").value));",
+    "status": "SUCCESS",
+    "expectedError": false,
+    "output": [
+      {
+        "type": "text",
+        "text": "original pasted added"
+      }
+    ]
+  },
+  {
+    "name": "tab.click",
+    "code": "ax=await tab.getAXState({emit:false,disableDiffing:true}); var incrementId=Number(ax.match(/(\\d+) button[^\\n]*Increment/)[1]); await tab.click(incrementId); nodeRepl.write(await tab.playwright.locator(\"#count\").innerText());",
+    "status": "SUCCESS",
+    "expectedError": false,
+    "output": [
+      {
+        "type": "text",
+        "text": "1"
+      }
+    ]
+  },
+  {
+    "name": "tab.performSecondaryAction",
+    "code": "ax=await tab.getAXState({emit:false,disableDiffing:true}); nodeRepl.write(ax.match(/[^\\n]*Details[^\\n]*/g)); var detailsId=Number(ax.match(/(\\d+)[^\\n]*Details[^\\n]*Actions: Expand/)[1]); await tab.performSecondaryAction(detailsId,\"Expand\");",
+    "status": "SUCCESS",
+    "expectedError": false,
+    "output": [
+      {
+        "type": "text",
+        "text": "[\"\\t\\t30 button (collapsed) Details, Secondary Actions: Expand\",\"\\t\\t\\t31 text Details\"]"
+      }
+    ]
+  },
+  {
+    "name": "tab.scroll",
+    "code": "await tab.scroll([300,300],\"down\",0.2); await tab.scroll([300,300],\"up\",0.2);",
+    "status": "SUCCESS",
+    "expectedError": false,
+    "output": [
+      {
+        "type": "text",
+        "text": "undefined"
+      }
+    ]
+  },
+  {
+    "name": "tab.drag",
+    "code": "await tab.playwright.getByText(\"Drag me\",{exact:true}).click(); var rects=await tab.playwright.evaluate(()=>[\"drag\",\"drop\"].map(id=>{const r=document.getElementById(id).getBoundingClientRect();return [r.x+r.width/2,r.y+r.height/2]})); await tab.drag(rects[0],rects[1]);",
+    "status": "SUCCESS",
+    "expectedError": false,
+    "output": [
+      {
+        "type": "text",
+        "text": "undefined"
+      }
+    ]
+  },
+  {
+    "name": "locator.downloadMedia",
+    "code": "nodeRepl.write(await tab.playwright.getByRole(\"link\",{name:\"Download image\",exact:true}).downloadMedia({timeoutMs:4000}));",
+    "status": "SUCCESS",
+    "expectedError": false,
+    "output": [
+      {
+        "type": "text",
+        "text": "/var/folders/gb/js_43wns2yvb50bbf33l04y00000gn/T/playwright-artifacts-PFc4xq/edb4f517-1999-435c-8e57-945f9ef1c843"
+      }
+    ]
+  },
+  {
+    "name": "confirmDialog.dismiss",
+    "code": "await tab.playwright.getByRole(\"button\",{name:\"Confirm\",exact:true}).click(); await tab.playwright.waitForTimeout(600); await (await tab.getJsDialog()).dismiss();",
+    "status": "SUCCESS",
+    "expectedError": false,
+    "output": [
+      {
+        "type": "text",
+        "text": "undefined"
+      }
+    ]
+  },
+  {
+    "name": "promptDialog.dismiss",
+    "code": "await tab.playwright.getByRole(\"button\",{name:\"Prompt\",exact:true}).click(); await tab.playwright.waitForTimeout(600); await (await tab.getJsDialog()).dismiss();",
+    "status": "SUCCESS",
+    "expectedError": false,
+    "output": [
+      {
+        "type": "text",
+        "text": "undefined"
+      }
+    ]
+  },
+  {
+    "name": "webmcp.tools.call",
+    "code": "const wm=await tab.capabilities.get(\"webmcp\"); const tools=await wm.fetchTools(); var toolName=tools.description().match(/\"name\": \"([^\"]+)\"/)[1]; nodeRepl.write(await tools.call(toolName,{text:\"bridge-native-WebMCP-verified\"}));",
+    "status": "SUCCESS",
+    "expectedError": false,
+    "output": [
+      {
+        "type": "text",
+        "text": "{\"content\":[{\"type\":\"text\",\"text\":\"bridge-native-WebMCP-verified\"}]}"
+      }
+    ]
+  },
+  {
+    "name": "exportGsuite invalid URL rejects",
+    "code": "await tab.content.exportGsuite(\"pdf\");",
+    "status": "SUCCESS",
+    "expectedError": true,
+    "output": [
+      {
+        "type": "text",
+        "text": "Error: Tab is not a Google Workspace document\n    at file:///Users/kihoon/Documents/Codex/2026-10-01-mcp/browser-agent-bridge/.cache/sdk/fcdece4affce0fa27aa0b0d7acacbffa557df33bebd183a13aff23bf6585ee2a/original-runtime.mjs:1247:23229\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)\n    at async Ct.send (file:///Users/kihoon/Documents/Codex/2026-10-01-mcp/browser-agent-bridge/.cache/sdk/fcdece4affce0fa27aa0b0d7acacbffa557df33bebd183a13aff23bf6585ee2a/original-client.mjs:9:11475)\n    at async ot.exportGsuite (file:///Users/kihoon/Documents/Codex/2026-10-01-mcp/browser-agent-bridge/.cache/sdk/fcdece4affce0fa27aa0b0d7acacbffa557df33bebd183a13aff23bf6585ee2a/original-client.mjs:8:17426)\n    at async <anonymous>:1:1"
+      }
+    ]
+  },
+  {
+    "name": "exportYouTubeTranscript invalid URL rejects",
+    "code": "await tab.content.exportYouTubeTranscript();",
+    "status": "SUCCESS",
+    "expectedError": true,
+    "output": [
+      {
+        "type": "text",
+        "text": "Error: Tab is not a supported YouTube watch page\n    at file:///Users/kihoon/Documents/Codex/2026-10-01-mcp/browser-agent-bridge/.cache/sdk/fcdece4affce0fa27aa0b0d7acacbffa557df33bebd183a13aff23bf6585ee2a/original-runtime.mjs:1247:24234\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)\n    at async Ct.send (file:///Users/kihoon/Documents/Codex/2026-10-01-mcp/browser-agent-bridge/.cache/sdk/fcdece4affce0fa27aa0b0d7acacbffa557df33bebd183a13aff23bf6585ee2a/original-client.mjs:9:11475)\n    at async ot.exportYouTubeTranscript (file:///Users/kihoon/Documents/Codex/2026-10-01-mcp/browser-agent-bridge/.cache/sdk/fcdece4affce0fa27aa0b0d7acacbffa557df33bebd183a13aff23bf6585ee2a/original-client.mjs:8:17557)\n    at async <anonymous>:1:1"
+      }
+    ]
+  },
+  {
+    "name": "multi-agent conflicting tab rejects",
+    "code": "const browser=await agent.browsers.get(\"chrome\"); const tab=await browser.tabs.get(\"16092799\"); await tab.getAXState();",
+    "status": "SUCCESS",
+    "expectedError": true,
+    "output": [
+      {
+        "type": "text",
+        "text": "Error: Tab 16092799 is leased by another agent session\n    at rawTransport (file:///Users/kihoon/Documents/Codex/2026-10-01-mcp/browser-agent-bridge/bridge/js-worker.mjs:34:25)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)\n    at async transport (file:///Users/kihoon/Documents/Codex/2026-10-01-mcp/browser-agent-bridge/bridge/js-worker.mjs:54:17)\n    at async file:///Users/kihoon/Documents/Codex/2026-10-01-mcp/browser-agent-bridge/.cache/sdk/fcdece4affce0fa27aa0b0d7acacbffa557df33bebd183a13aff23bf6585ee2a/original-runtime.mjs:1235:25588\n    at async cf.ensureAttachedTab (file:///Users/kihoon/Documents/Codex/2026-10-01-mcp/browser-agent-bridge/.cache/sdk/fcdece4affce0fa27aa0b0d7acacbffa557df33bebd183a13aff23bf6585ee2a/original-runtime.mjs:1235:26069)\n    at async uf (file:///Users/kihoon/Documents/Codex/2026-10-01-mcp/browser-agent-bridge/.cache/sdk/fcdece4affce0fa27aa0b0d7acacbffa557df33bebd183a13aff23bf6585ee2a/original-runtime.mjs:1235:38593)\n    at async cf.executeTargetCdp (file:///Users/kihoon/Documents/Codex/2026-10-01-mcp/browser-agent-bridge/.cache/sdk/fcdece4affce0fa27aa0b0d7acacbffa557df33bebd183a13aff23bf6585ee2a/original-runtime.mjs:1235:15930)\n    at async cf.callTarget (file:///Users/kihoon/Documents/Codex/2026-10-01-mcp/browser-agent-bridge/.cache/sdk/fcdece4affce0fa27aa0b0d7acacbffa557df33bebd183a13aff23bf6585ee2a/original-runtime.mjs:1235:11634)\n    at async cf.call (file:///Users/kihoon/Documents/Codex/2026-10-01-mcp/browser-agent-bridge/.cache/sdk/fcdece4affce0fa27aa0b0d7acacbffa557df33bebd183a13aff23bf6585ee2a/original-runtime.mjs:1235:11559)\n    at async file:///Users/kihoon/Documents/Codex/2026-10-01-mcp/browser-agent-bridge/.cache/sdk/fcdece4affce0fa27aa0b0d7acacbffa557df33bebd183a13aff23bf6585ee2a/original-runtime.mjs:1244:5313"
+      }
+    ]
+  },
+  {
+    "name": "second agent independent tab",
+    "code": "const isolated=await browser.tabs.new(); await isolated.goto(\"http://127.0.0.1:29653/next.html\"); await isolated.playwright.waitForLoadState({state:\"load\"}); nodeRepl.write(await isolated.title()); await isolated.close();",
+    "status": "SUCCESS",
+    "expectedError": false,
+    "output": [
+      {
+        "type": "text",
+        "text": "Audit Next"
+      }
+    ]
+  },
+  {
+    "name": "cleanup",
+    "code": "await tab.close();",
+    "status": "SUCCESS",
+    "expectedError": false,
+    "output": [
+      {
+        "type": "text",
+        "text": "undefined"
+      }
+    ]
+  }
+]
