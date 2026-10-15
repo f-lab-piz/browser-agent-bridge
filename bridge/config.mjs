@@ -6,21 +6,26 @@ export const ROOT = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
   "..",
 );
-export async function token() {
-  const dir = path.join(ROOT, ".local"),
-    file = path.join(dir, "token");
+export async function token(dir = path.join(ROOT, ".local")) {
+  const file = path.join(dir, "token");
   await fs.mkdir(dir, { recursive: true, mode: 0o700 });
   try {
     return (await fs.readFile(file, "utf8")).trim();
-  } catch (e) {
-    if (e.code !== "ENOENT") throw e;
-    const value = crypto.randomBytes(32).toString("hex");
-    try {
-      await fs.writeFile(file, value, { mode: 0o600, flag: "wx" });
-      return value;
-    } catch (e) {
-      if (e.code === "EEXIST") return (await fs.readFile(file, "utf8")).trim();
-      throw e;
-    }
+  } catch (error) {
+    if (error.code !== "ENOENT") throw error;
   }
+  // 생성이 끝난 파일을 원자적으로 공개하여 동시 stdio 시작 시 빈 토큰을 읽지 않게 한다.
+  const temporary = path.join(dir, `.token-${crypto.randomUUID()}`);
+  await fs.writeFile(temporary, crypto.randomBytes(32).toString("hex"), {
+    mode: 0o600,
+    flag: "wx",
+  });
+  try {
+    await fs.link(temporary, file);
+  } catch (error) {
+    if (error.code !== "EEXIST") throw error;
+  } finally {
+    await fs.unlink(temporary);
+  }
+  return (await fs.readFile(file, "utf8")).trim();
 }

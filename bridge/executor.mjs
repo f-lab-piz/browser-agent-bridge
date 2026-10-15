@@ -12,8 +12,10 @@ export class JsExecutor {
     this.ready = new Promise((resolve, reject) => {
       const worker = (this.worker = new Worker(
         new URL("./js-worker.mjs", import.meta.url),
-        { workerData: this.options },
+        { workerData: this.options, stdout: true, stderr: true },
       ));
+      worker.stdout.on("data", (bytes) => process.stderr.write(bytes));
+      worker.stderr.on("data", (bytes) => process.stderr.write(bytes));
       worker.on("message", (m) => {
         if (m.ready) resolve(m);
         if (m.id) {

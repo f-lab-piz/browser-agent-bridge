@@ -56,3 +56,18 @@ test("HTTP 인증·탭 lease·반납·업로드 차단", async () => {
     await b.close();
   }
 });
+
+test("hello 없는 WebSocket과 HTTP 선연결도 종료 시 정리한다", async () => {
+  const net = await import("node:net");
+  const b = await startBroker({ port: 0, secret: "close-token" });
+  const ws = new WebSocket(`ws://127.0.0.1:${b.port}/?token=close-token`);
+  await once(ws, "open");
+  const socket = net.connect({ host: "127.0.0.1", port: b.port });
+  await once(socket, "connect");
+  try {
+    await b.close();
+  } finally {
+    ws.terminate();
+    socket.destroy();
+  }
+});
