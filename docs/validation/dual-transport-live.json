@@ -1,0 +1,150 @@
+{
+  "pythonHost": false,
+  "results": [
+    {
+      "name": "HTTP bundled SDK AX",
+      "code": "const browser=await agent.browsers.get(\"chrome\");const tab=await browser.tabs.new();await tab.goto(\"http://127.0.0.1:29661/\");await tab.playwright.waitForLoadState({state:\"load\"});nodeRepl.write((await tab.getAXState({emit:false})).includes(\"Browser Tool Audit\"));",
+      "expectedError": false,
+      "status": "SUCCESS",
+      "output": [
+        {
+          "type": "text",
+          "text": "true"
+        }
+      ]
+    },
+    {
+      "name": "stdio A navigation and AX",
+      "code": "const browser=await agent.browsers.get(\"chrome\");const tab=await browser.tabs.new();await tab.goto(\"http://127.0.0.1:29661/\");await tab.playwright.waitForLoadState({state:\"load\"});nodeRepl.write({id:tab.id,axLength:(await tab.getAXState({emit:false})).length});",
+      "expectedError": false,
+      "status": "SUCCESS",
+      "output": [
+        {
+          "type": "text",
+          "text": "{\"id\":\"2029582972\",\"axLength\":1941}"
+        }
+      ]
+    },
+    {
+      "name": "stdio persistent locator",
+      "code": "await tab.playwright.getByLabel(\"Name\",{exact:true}).fill(\"stdio-native\");nodeRepl.write(await tab.playwright.evaluate(()=>document.querySelector(\"#name\").value));",
+      "expectedError": false,
+      "status": "SUCCESS",
+      "output": [
+        {
+          "type": "text",
+          "text": "stdio-native"
+        }
+      ]
+    },
+    {
+      "name": "stdio screenshot",
+      "code": "await nodeRepl.emitImage(await tab.screenshot({fullPage:false}));",
+      "expectedError": false,
+      "status": "SUCCESS",
+      "output": [
+        {
+          "type": "image",
+          "mimeType": "image/png",
+          "base64Length": 59536
+        }
+      ]
+    },
+    {
+      "name": "stdio WebMCP",
+      "code": "const webmcp=await tab.capabilities.get(\"webmcp\");const tools=await webmcp.fetchTools();const toolName=tools.description().match(/\"name\": \"([^\"]+)\"/)[1];nodeRepl.write(await tools.call(toolName,{text:\"stdio-WebMCP\"}));",
+      "expectedError": false,
+      "status": "SUCCESS",
+      "output": [
+        {
+          "type": "text",
+          "text": "{\"content\":[{\"type\":\"text\",\"text\":\"stdio-WebMCP\"}]}"
+        }
+      ]
+    },
+    {
+      "name": "stdio B cross-process lease",
+      "code": "const browser=await agent.browsers.get(\"chrome\");const foreign=await browser.tabs.get(\"2029582972\");await foreign.getAXState();",
+      "expectedError": true,
+      "status": "SUCCESS",
+      "output": [
+        {
+          "type": "text",
+          "text": "Error: Tab 2029582972 is leased by another agent session\n    at rawTransport (file:///Users/kihoon/Documents/Codex/2026-10-01-mcp/browser-agent-bridge/bridge/js-worker.mjs:34:25)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)\n    at async transport (file:///Users/kihoon/Documents/Codex/2026-10-01-mcp/browser-agent-bridge/bridge/js-worker.mjs:54:17)\n    at async file:///Users/kihoon/Documents/Codex/2026-10-01-mcp/browser-agent-bridge/.cache/sdk/fcdece4affce0fa27aa0b0d7acacbffa557df33bebd183a13aff23bf6585ee2a/original-runtime.mjs:1235:25588\n    at async cf.ensureAttachedTab (file:///Users/kihoon/Documents/Codex/2026-10-01-mcp/browser-agent-bridge/.cache/sdk/fcdece4affce0fa27aa0b0d7acacbffa557df33bebd183a13aff23bf6585ee2a/original-runtime.mjs:1235:26069)\n    at async uf (file:///Users/kihoon/Documents/Codex/2026-10-01-mcp/browser-agent-bridge/.cache/sdk/fcdece4affce0fa27aa0b0d7acacbffa557df33bebd183a13aff23bf6585ee2a/original-runtime.mjs:1235:38593)\n    at async cf.executeTargetCdp (file:///Users/kihoon/Documents/Codex/2026-10-01-mcp/browser-agent-bridge/.cache/sdk/fcdece4affce0fa27aa0b0d7acacbffa557df33bebd183a13aff23bf6585ee2a/original-runtime.mjs:1235:15930)\n    at async cf.callTarget (file:///Users/kihoon/Documents/Codex/2026-10-01-mcp/browser-agent-bridge/.cache/sdk/fcdece4affce0fa27aa0b0d7acacbffa557df33bebd183a13aff23bf6585ee2a/original-runtime.mjs:1235:11634)\n    at async cf.call (file:///Users/kihoon/Documents/Codex/2026-10-01-mcp/browser-agent-bridge/.cache/sdk/fcdece4affce0fa27aa0b0d7acacbffa557df33bebd183a13aff23bf6585ee2a/original-runtime.mjs:1235:11559)\n    at async file:///Users/kihoon/Documents/Codex/2026-10-01-mcp/browser-agent-bridge/.cache/sdk/fcdece4affce0fa27aa0b0d7acacbffa557df33bebd183a13aff23bf6585ee2a/original-runtime.mjs:1244:5313"
+        }
+      ]
+    },
+    {
+      "name": "HTTP versus stdio lease",
+      "code": "const foreign=await browser.tabs.get(\"2029582972\");await foreign.getAXState();",
+      "expectedError": true,
+      "status": "SUCCESS",
+      "output": [
+        {
+          "type": "text",
+          "text": "Error: Tab 2029582972 is leased by another agent session\n    at rawTransport (file:///Users/kihoon/Documents/Codex/2026-10-01-mcp/browser-agent-bridge/bridge/js-worker.mjs:34:25)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)\n    at async transport (file:///Users/kihoon/Documents/Codex/2026-10-01-mcp/browser-agent-bridge/bridge/js-worker.mjs:54:17)\n    at async file:///Users/kihoon/Documents/Codex/2026-10-01-mcp/browser-agent-bridge/.cache/sdk/fcdece4affce0fa27aa0b0d7acacbffa557df33bebd183a13aff23bf6585ee2a/original-runtime.mjs:1235:25588\n    at async cf.ensureAttachedTab (file:///Users/kihoon/Documents/Codex/2026-10-01-mcp/browser-agent-bridge/.cache/sdk/fcdece4affce0fa27aa0b0d7acacbffa557df33bebd183a13aff23bf6585ee2a/original-runtime.mjs:1235:26069)\n    at async uf (file:///Users/kihoon/Documents/Codex/2026-10-01-mcp/browser-agent-bridge/.cache/sdk/fcdece4affce0fa27aa0b0d7acacbffa557df33bebd183a13aff23bf6585ee2a/original-runtime.mjs:1235:38593)\n    at async cf.executeTargetCdp (file:///Users/kihoon/Documents/Codex/2026-10-01-mcp/browser-agent-bridge/.cache/sdk/fcdece4affce0fa27aa0b0d7acacbffa557df33bebd183a13aff23bf6585ee2a/original-runtime.mjs:1235:15930)\n    at async cf.callTarget (file:///Users/kihoon/Documents/Codex/2026-10-01-mcp/browser-agent-bridge/.cache/sdk/fcdece4affce0fa27aa0b0d7acacbffa557df33bebd183a13aff23bf6585ee2a/original-runtime.mjs:1235:11634)\n    at async cf.call (file:///Users/kihoon/Documents/Codex/2026-10-01-mcp/browser-agent-bridge/.cache/sdk/fcdece4affce0fa27aa0b0d7acacbffa557df33bebd183a13aff23bf6585ee2a/original-runtime.mjs:1235:11559)\n    at async file:///Users/kihoon/Documents/Codex/2026-10-01-mcp/browser-agent-bridge/.cache/sdk/fcdece4affce0fa27aa0b0d7acacbffa557df33bebd183a13aff23bf6585ee2a/original-runtime.mjs:1244:5313"
+        }
+      ]
+    },
+    {
+      "name": "stdio B independent tab",
+      "code": "const tab=await browser.tabs.new();await tab.goto(\"http://127.0.0.1:29661/next.html\");await tab.playwright.waitForLoadState({state:\"load\"});nodeRepl.write({id:tab.id,title:await tab.title()});",
+      "expectedError": false,
+      "status": "SUCCESS",
+      "output": [
+        {
+          "type": "text",
+          "text": "{\"id\":\"2029582973\",\"title\":\"Audit Next\"}"
+        }
+      ]
+    },
+    {
+      "name": "reset releases cross-process lease",
+      "code": "await foreign.getAXState({emit:false});nodeRepl.write(\"acquired after reset\");",
+      "expectedError": false,
+      "status": "SUCCESS",
+      "output": [
+        {
+          "type": "text",
+          "text": "acquired after reset"
+        }
+      ]
+    },
+    {
+      "name": "EOF releases tab for HTTP",
+      "code": "await foreign.getAXState({emit:false});nodeRepl.write(\"acquired after EOF\");",
+      "expectedError": false,
+      "status": "SUCCESS",
+      "output": [
+        {
+          "type": "text",
+          "text": "acquired after EOF"
+        }
+      ]
+    },
+    {
+      "name": "stdio port reuse and isolated variables",
+      "code": "nodeRepl.write({oldTabType:typeof tab,browserCount:(await agent.browsers.list()).length});",
+      "expectedError": false,
+      "status": "SUCCESS",
+      "output": [
+        {
+          "type": "text",
+          "text": "{\"oldTabType\":\"undefined\",\"browserCount\":1}"
+        }
+      ]
+    },
+    {
+      "name": "cleanup",
+      "code": "await foreign.close();await (await browser.tabs.get(\"2029582973\")).close();await tab.close();",
+      "expectedError": false,
+      "status": "SUCCESS",
+      "output": [
+        {
+          "type": "text",
+          "text": "undefined"
+        }
+      ]
+    }
+  ]
+}

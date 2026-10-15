@@ -1,29 +1,9 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { spawn } from "node:child_process";
-import { once } from "node:events";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
 import { startBroker } from "../bridge/daemon.mjs";
-const python = () =>
-  new Promise((resolve, reject) => {
-    const child = spawn("python3", ["server/serve.py", "--port", "0"], {
-      cwd: new URL("..", import.meta.url),
-      stdio: ["ignore", "pipe", "pipe"],
-    });
-    let s = "";
-    child.stdout.on("data", (b) => {
-      s += b;
-      const m = s.match(/SDK: (http:\/\/[^\s]+)\/manifest.json/);
-      if (m) resolve({ child, url: m[1] + "/" });
-    });
-    child.once("error", reject);
-    child.once("exit", (c) => reject(Error("Python exited " + c)));
-  });
 test("HTTP MCP의 JavaScript 변수 유지와 에이전트 세션 격리", async () => {
-  const host = await python();
-  const previous = process.env.BROWSER_SDK_URL;
-  process.env.BROWSER_SDK_URL = host.url;
   const broker = await startBroker({ port: 0, secret: "test-token" });
   let a, b;
   try {
@@ -93,8 +73,5 @@ test("HTTP MCP의 JavaScript 변수 유지와 에이전트 세션 격리", async
     await a?.close();
     await b?.close();
     await broker.close();
-    host.child.kill();
-    if (previous === undefined) delete process.env.BROWSER_SDK_URL;
-    else process.env.BROWSER_SDK_URL = previous;
   }
 });

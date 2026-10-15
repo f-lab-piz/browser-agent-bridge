@@ -42,3 +42,43 @@
 ### Next Actions
 
 실제 사용자 Chrome에서 확장을 개발자 모드로 로드하고 브릿지 토큰을 옵션에 등록하면 됩니다. 환경별 추가 호환성은 기록된 시험과 구분하여 진행합니다.
+
+## 2026-10-15 HTTP·stdio 통합 (0.2.0)
+
+### Plan Input
+
+사용자 요청: “두방식 모두 지원하게 깔끔하게 만들어봐”. 기존 HTTP 구현을 유지하고 stdio에서는 에이전트가 실행하는 MCP 자식 프로세스가 확장 연결을 함께 제공한다.
+
+### Implemented
+
+- `mcp-server.mjs` 공통 팩토리로 툴·입출력·JS 세션을 공유. `cli.mjs --transport http|stdio`로 선택.
+- SDK 기본값을 bundled JS/WASM으로 변경. 파일/HTTP(S) manifest 해시 검증, 선택적 Python/원격 SDK 유지.
+- `--pair` 토큰 준비, 동시 시작의 원자적 토큰 생성, stdio 포트29652–29660 자동 선택. HTTP 기본29651 예약.
+- 확장 연결 pool, 로컬 자동 발견, nonce·포트 HMAC으로 확인 후 연결. 여러 프로세스 요청/응답 라우팅.
+- 확장의 전역 `(connectionId, sessionId)` 탭 lease. reset/EOF/disconnect 반납과 처리 중 단절 시 미반납 방지.
+- stdout 프로토콜 전용, Worker 출력 stderr 분리. stdin 종료·SIGTERM 및 선연결/hello 없는 소켓까지 정리.
+- 설치·설정·혼용 시험 절차와 원시 결과 기록.
+
+### Test Coverage
+
+HTTP·stdio `listTools()` 전체 동일, 실제 stdio 자식 프로세스의 변수 유지/reset/EOF/포트 해제, stdout 오염 방지, bundled/원격 SDK, 잘못된 해시/경로, 토큰 동시 생성, 발견 주소 중복/설정, HMAC 인증, 다중 연결 라우팅, 전역 lease·연결 중 탭 생성·잔여 소켓 정리, 기존 원본 prefix/WASM 검증.
+
+실제 Chrome 155의 별도 프로필에서 HTTP 하나와 stdio 두 프로세스를 동시에 연결. Python 미실행. AX·locator 입력·이미지·WebMCP, stdio 간/HTTP 간 예상 거절, reset/EOF 후 재획득, 포트 재사용 확인.
+
+### Test Command and Result
+
+- `npm run build`: 성공
+- `npm test`: 16 passed, 0 failed (Node 25.2.1)
+- `PATH=/opt/homebrew/opt/node@22/bin:$PATH npm test`: 16 passed, 0 failed (Node 22.21.1)
+- `node scripts/live-dual-transport.mjs`: 12/12 케이스 통과, 예상 거절2건 포함
+- `node bridge/cli.mjs --help`, `node bridge/daemon.mjs --help`: 기존 진입점 포함 정상 종료
+
+원시 증거: `docs/validation/dual-transport-live.json`, `dual-unit-tests*.txt`.
+
+### Decisions
+
+MCP transport를 공통 실행부에서 분리하고 Node 프로세스 자체에 확장 endpoint를 포함. stdio 전용 실행은 HTTP `/mcp`를 노출하지 않음. 원본 브라우저 로직은 변경하지 않음. 기본 포트 범위를 한정하며 더 많은 프로세스는 명시적 포트/주소를 사용. Python·원격 SDK는 선택 사항.
+
+### Next Actions
+
+확장을 새로고침하고 `--pair` 토큰을 저장한 뒤 README의 HTTP 또는 stdio MCP 설정을 적용한다. 추가 앱/브라우저 버전 호환성은 별도 시험으로 기록한다.

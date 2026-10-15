@@ -4,17 +4,22 @@ import crypto from "node:crypto";
 import { pathToFileURL } from "node:url";
 import { ROOT } from "./config.mjs";
 export async function loadSdk(
-  base = process.env.BROWSER_SDK_URL ?? "http://127.0.0.1:29652/",
+  base = process.env.BROWSER_SDK_URL ??
+    new URL("../sdk/", import.meta.url).href,
 ) {
   const url = new URL(base);
-  if (!["http:", "https:"].includes(url.protocol))
-    throw Error("SDK host must use HTTP(S)");
-  const response = await fetch(new URL("manifest.json", url), {
-    signal: AbortSignal.timeout(10000),
-  });
-  if (!response.ok)
-    throw Error(`SDK manifest HTTP ${response.status}. Run npm run host.`);
-  const text = await response.text(),
+  if (!["http:", "https:", "file:"].includes(url.protocol))
+    throw Error("SDK host must use HTTP(S) or a local file directory");
+  async function read(name) {
+    const target = new URL(name, url);
+    if (url.protocol === "file:") return fs.readFile(target);
+    const response = await fetch(target, {
+      signal: AbortSignal.timeout(30000),
+    });
+    if (!response.ok) throw Error(`SDK HTTP ${response.status}: ${name}`);
+    return Buffer.from(await response.arrayBuffer());
+  }
+  const text = (await read("manifest.json")).toString("utf8"),
     manifest = JSON.parse(text),
     digest = crypto.createHash("sha256").update(text).digest("hex");
   if (!manifest.files || !Object.hasOwn(manifest.files, manifest.entry))
@@ -41,11 +46,7 @@ export async function loadSdk(
       !bytes ||
       crypto.createHash("sha256").update(bytes).digest("hex") !== spec.sha256
     ) {
-      const r = await fetch(new URL(name, url), {
-        signal: AbortSignal.timeout(30000),
-      });
-      if (!r.ok) throw Error(`SDK asset HTTP ${r.status}: ${name}`);
-      bytes = Buffer.from(await r.arrayBuffer());
+      bytes = await read(name);
       if (
         bytes.length !== spec.bytes ||
         crypto.createHash("sha256").update(bytes).digest("hex") !== spec.sha256

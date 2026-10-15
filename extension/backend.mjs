@@ -1,6 +1,41 @@
 // Chrome API 실행 계층. Node 브릿지의 원본 SDK가 호출하는 Native API 어댑터.
 export function createChromeBackend(chrome, emit = () => {}) {
-  const attached = new Set();
+  const attached = new Set(),
+    leases = new Map(),
+    sessionsByConnection = new Map();
+  function claim(tabId, context) {
+    if (!context.sessionId) return;
+    if (context.connectionId && !sessionsByConnection.has(context.connectionId))
+      throw Error("Agent connection closed during operation");
+    const owner = leases.get(tabId);
+    if (
+      owner &&
+      (owner.sessionId !== context.sessionId ||
+        owner.connectionId !== context.connectionId)
+    )
+      throw Error(`Tab ${tabId} is leased by another agent session`);
+    leases.set(tabId, {
+      sessionId: context.sessionId,
+      connectionId: context.connectionId,
+    });
+  }
+  function releaseSession(sessionId, connectionId) {
+    for (const [id, owner] of leases)
+      if (
+        owner.sessionId === sessionId &&
+        owner.connectionId === connectionId
+      ) {
+        leases.delete(id);
+        if (owned.get(id) === sessionId) owned.delete(id);
+      }
+    viewports.delete(sessionId);
+  }
+  chrome.tabs.onRemoved?.addListener((id) => {
+    leases.delete(id);
+    owned.delete(id);
+    attached.delete(id);
+    marks.delete(id);
+  });
   const owned = new Map(),
     marks = new Map(),
     viewports = new Map();
@@ -125,6 +160,7 @@ export function createChromeBackend(chrome, emit = () => {}) {
         active: false,
         ...(windowId ? { windowId } : {}),
       });
+      claim(t.id, this);
       owned.set(t.id, this.sessionId);
       const viewport = viewports.get(this.sessionId);
       if (viewport) {
@@ -176,6 +212,9 @@ export function createChromeBackend(chrome, emit = () => {}) {
     },
     async nameSession(name) {
       sessionName = name;
+    },
+    async releaseSession() {
+      releaseSession(this.sessionId, this.connectionId);
     },
     async allowDownload() {},
     async moveMouse() {},
@@ -249,7 +288,44 @@ export function createChromeBackend(chrome, emit = () => {}) {
     async invoke(method, args, context = {}) {
       if (!Object.hasOwn(methods, method))
         throw Error(`Native API not mapped: ${method}`);
+      if (context.connectionId && context.sessionId) {
+        const set = sessionsByConnection.get(context.connectionId) ?? new Set();
+        set.add(context.sessionId);
+        sessionsByConnection.set(context.connectionId, set);
+      }
+      const tab =
+        typeof args[0] === "number"
+          ? args[0]
+          : (args[0]?.target?.tabId ?? args[0]?.tabId);
+      if (
+        Number.isInteger(tab) &&
+        [
+          "attach",
+          "detach",
+          "attachTarget",
+          "detachTarget",
+          "executeCdp",
+          "claimUserTab",
+          "closeTab",
+          "markTab",
+        ].includes(method)
+      )
+        claim(tab, context);
+      if (
+        method === "executeCdp" &&
+        ["Target.closeTarget", "Target.attachToTarget"].includes(args[0].method)
+      ) {
+        const target = (await chrome.debugger.getTargets()).find(
+          (t) => t.id === args[0].commandParams?.targetId,
+        );
+        if (target?.tabId) claim(target.tabId, context);
+      }
       return methods[method].apply(context, args);
+    },
+    releaseConnection(connectionId) {
+      for (const sessionId of sessionsByConnection.get(connectionId) ?? [])
+        releaseSession(sessionId, connectionId);
+      sessionsByConnection.delete(connectionId);
     },
     methods,
   };

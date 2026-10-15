@@ -87,3 +87,34 @@ test("확장 Native API: 탭·CDP session·history·미지원 명령 오류", as
   await backend.invoke("closeTab", [2]);
   assert.equal((await backend.invoke("getTabs", [])).length, 1);
 });
+
+test("확장 전역 탭 lease: 서로 다른 프로세스 거절, reset·disconnect 후 반납", async () => {
+  const backend = createChromeBackend(fakeChrome());
+  const a = { sessionId: "a", connectionId: "one" },
+    b = { sessionId: "b", connectionId: "two" };
+  const tab = await backend.invoke("createTab", [], a);
+  await assert.rejects(backend.invoke("attach", [tab.id], b), /leased/);
+  await backend.invoke("releaseSession", [], a);
+  await backend.invoke("attach", [tab.id], b);
+  await assert.rejects(backend.invoke("closeTab", [tab.id], a), /leased/);
+  backend.releaseConnection("two");
+  await backend.invoke("closeTab", [tab.id], a);
+});
+
+test("탭 생성 응답 전에 연결이 끊겨도 사용권이 남지 않는다", async () => {
+  const chrome = fakeChrome();
+  let resolve;
+  chrome.tabs.create = () => new Promise((r) => (resolve = r));
+  const backend = createChromeBackend(chrome);
+  const pending = backend.invoke("createTab", [], {
+    sessionId: "old",
+    connectionId: "old-connection",
+  });
+  backend.releaseConnection("old-connection");
+  resolve({ id: 99, url: "about:blank" });
+  await assert.rejects(pending, /connection closed/);
+  await backend.invoke("attach", [99], {
+    sessionId: "new",
+    connectionId: "new-connection",
+  });
+});

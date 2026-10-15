@@ -7,6 +7,8 @@ import { pathToFileURL } from "node:url";
 import { ROOT, token } from "./config.mjs";
 export async function startBroker({
   port = 29651,
+  enableHttpMcp = true,
+  sdkUrl = process.env.BROWSER_SDK_URL,
   secret,
   allowUploads = false,
   allowHistory = false,
@@ -31,6 +33,7 @@ export async function startBroker({
       typeof args[0] === "number"
         ? args[0]
         : (args[0]?.target?.tabId ?? args[0]?.tabId);
+    let previousOwner;
     if (
       Number.isInteger(tab) &&
       [
@@ -45,6 +48,7 @@ export async function startBroker({
     ) {
       const key = `${browserId}:${tab}`,
         owner = leases.get(key);
+      previousOwner = owner;
       if (owner && owner !== sessionId)
         throw Error(`Tab ${tab} is leased by another agent session`);
       if (method !== "detach") leases.set(key, sessionId);
@@ -65,6 +69,11 @@ export async function startBroker({
         },
         reject: (e) => {
           clearTimeout(timer);
+          if (
+            previousOwner === undefined &&
+            leases.get(`${browserId}:${tab}`) === sessionId
+          )
+            leases.delete(`${browserId}:${tab}`);
           reject(e);
         },
       });
@@ -104,6 +113,11 @@ export async function startBroker({
     if (operation === "release") {
       for (const [key, owner] of leases)
         if (owner === sessionId) leases.delete(key);
+      await Promise.allSettled(
+        [...peers.keys()].map((browserId) =>
+          native(browserId, sessionId, "releaseSession", []),
+        ),
+      );
       return {};
     }
     if (operation === "documentation") {
@@ -135,12 +149,35 @@ export async function startBroker({
   let mcp;
   const server = http.createServer(async (req, res) => {
     try {
+      const target = new URL(req.url, "http://localhost");
+      if (req.method === "GET" && target.pathname === "/discovery") {
+        const nonce = target.searchParams.get("nonce");
+        if (!nonce || !/^[a-f0-9-]{36}$/.test(nonce)) {
+          res.writeHead(400);
+          res.end();
+          return;
+        }
+        const port = server.address().port;
+        res.setHeader("content-type", "application/json");
+        res.setHeader("cache-control", "no-store");
+        res.end(
+          JSON.stringify({
+            protocol: "browser-agent-bridge/v1",
+            port,
+            proof: crypto
+              .createHmac("sha256", secret)
+              .update(`browser-agent-bridge/v1:${port}:${nonce}`)
+              .digest("hex"),
+          }),
+        );
+        return;
+      }
       if (req.headers.authorization !== `Bearer ${secret}`) {
         res.writeHead(401);
         res.end();
         return;
       }
-      if (req.url === "/mcp") return mcp.handle(req, res);
+      if (req.url === "/mcp" && enableHttpMcp) return mcp.handle(req, res);
       if (req.method !== "POST" || req.url !== "/rpc") {
         res.writeHead(404);
         res.end();
@@ -223,35 +260,39 @@ export async function startBroker({
           if (k.startsWith(id + ":")) leases.delete(k);
     });
   });
-  await new Promise((resolve) => server.listen(port, "127.0.0.1", resolve));
-  mcp = createMcpHttp({
-    broker: `http://127.0.0.1:${server.address().port}`,
-    secret,
-    sdkUrl: process.env.BROWSER_SDK_URL ?? "http://127.0.0.1:29652/",
+  await new Promise((resolve, reject) => {
+    server.once("error", reject);
+    server.listen(port, "127.0.0.1", () => {
+      server.off("error", reject);
+      resolve();
+    });
   });
+  if (enableHttpMcp)
+    mcp = createMcpHttp({
+      broker: `http://127.0.0.1:${server.address().port}`,
+      secret,
+      sdkUrl,
+    });
   return {
     port: server.address().port,
     dispatch,
     secret,
     async close() {
-      await mcp.close();
-      for (const p of peers.values()) p.ws.close();
+      await mcp?.close();
+      for (const socket of wss.clients) socket.terminate();
       wss.close();
-      await new Promise((r) => server.close(r));
+      await new Promise((r) => {
+        server.close(r);
+        server.closeAllConnections();
+      });
     },
   };
 }
-if (import.meta.url === pathToFileURL(process.argv[1] ?? "").href) {
-  const broker = await startBroker({
-    allowUploads: process.argv.includes("--allow-uploads"),
-    allowHistory: process.argv.includes("--allow-history"),
-  });
-  console.error(
-    `Browser bridge: http://127.0.0.1:${broker.port}\nExtension token: ${broker.secret}\nSDK host: npm run host\nMCP endpoint: http://127.0.0.1:29651/mcp (Streamable HTTP, Bearer token)`,
-  );
-  for (const signal of ["SIGINT", "SIGTERM"])
-    process.on(signal, async () => {
-      await broker.close();
-      process.exit();
+// 기존 직접 실행 경로도 통합 CLI에 위임한다. 동적 import의 순환 대기를 피한다.
+if (import.meta.url === pathToFileURL(process.argv[1] ?? "").href)
+  import("./cli.mjs")
+    .then(({ main }) => main())
+    .catch((error) => {
+      console.error(error.message);
+      process.exitCode = 1;
     });
-}
