@@ -1,0 +1,1037 @@
+[
+  {
+    "name": "setup",
+    "code": "const browser = await agent.browsers.get(\"chrome\"); const tab = await browser.tabs.new(); await tab.goto(\"http://127.0.0.1:29653/\");",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "undefined"
+      }
+    ]
+  },
+  {
+    "name": "agent.browsers.list",
+    "code": "// Reproduction example; connect browser/tab to the fixture first.\n// AX element numbers are from the recorded run: refresh before reuse.\nconst result = await agent.browsers.list();\nnodeRepl.write({kind: result === undefined ? \"undefined\" : typeof result, value: result === null || [\"string\",\"boolean\",\"number\"].includes(typeof result) ? result : undefined, length: Array.isArray(result) || result instanceof Uint8Array ? result.length : undefined});\n",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "{\"kind\":\"object\",\"length\":1}"
+      }
+    ]
+  },
+  {
+    "name": "browser.documentation",
+    "code": "// Reproduction example; connect browser/tab to the fixture first.\n// AX element numbers are from the recorded run: refresh before reuse.\nconst result = await browser.documentation();\nnodeRepl.write({kind: result === undefined ? \"undefined\" : typeof result, value: result === null || [\"string\",\"boolean\",\"number\"].includes(typeof result) ? result : undefined, length: Array.isArray(result) || result instanceof Uint8Array ? result.length : undefined});\n",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "{\"kind\":\"string\",\"value\":\"# API Reference\\n\\nUse this as the supported `agent.browsers.*` surface.\\n\\n```ts\\n// Returned by setupBrowserRuntime().\\n// browser was selected during bootstrap.\\ninterface Agent {\\n  browsers: Browsers; // API for finding and selecting browsers.\\n  documentation: Documentation; // API for reading packaged browser-use documentation by name.\\n}\\n\\ninterface Browsers {\\n  get(id: string): Promise<Browser>; // Get a browser by id or client type.\\n  list(): Promise<Array<{ family?: string; id: string; metadata?: { codexSessionId?: string; extensionInstanceId?: string }; name: string; profileName?: string; type: \\\"iab\\\" | \\\"extension\\\" | \\\"cdp\\\" | \\\"mcpapps\\\" }>>; // List available browsers.\\n}\\n\\ninterface Browser {\\n  browserId: string; // Browser id selected by `agent.browsers.get()`.\\n  capabilities: BrowserCapabilityCollection; // Browser-scoped optional capabilities advertised by the connected backend; discover IDs with `await browser.capabilities.list()`, then call `await (await browser.capabilities.get(id)).documentation()` for method details.\\n  tabs: Tabs; // API for interacting with browser tabs.\\n  user: BrowserUser; // Context for user-owned browser tabs.\\n  documentation(): Promise<string>; // Read browser guidance and the core API reference.\\n  history(options: BrowserHistoryOptions): Promise<Array<BrowserHistoryEntry>>; // List recent browsing history ordered by `dateVisited` descending.\\n  nameSession(name: string): Promise<void>; // Name the current browser automation session.\\n}\\n\\ninterface BrowserUser {\\n  claimTab(tab: string | BrowserUserTabInfo): Promise<Tab>; // Claim a user tab returned by `openTabs()` and return it as a controllable agent tab.\\n  openTabs(): Promise<Array<BrowserUserTabInfo>>; // List open top-level tabs across the user's browser windows ordered by `lastOpened` descending.\\n}\\n\\ninterface Tabs {\\n  content(options: TabsContentOptions): Promise<Array<TabsContentResult>>; // Load one or more URLs in temporary background tabs and extract their content without changing the selected tab.\\n  get(id: string): Promise<Tab>; // Get a tab by id.\\n  list(): Promise<Array<TabInfo>>; // List open tabs in the browser.\\n  new(): Promise<Tab>; // Create and return a new tab in the browser.\\n  selected(): Promise<undefined | Tab>; // Return the currently selected tab, if any.\\n}\\n\\ninterface Tab {\\n  ax: AXAPI; // API for interacting with accessibility state and accessibility elements.\\n  capabilities: TabCapabilityCollection; // Tab-scoped optional capabilities advertised by the connected backend; discover IDs with `await tab.capabilities.list()`, then call `await (await tab.capabilities.get(id)).documentation()` for method details.\\n  clipboard: TabClipboardAPI; // API for interacting with the browser session's clipboard.\\n  content: ContentAPI; // API for exporting tab content.\\n  cua: CUAAPI; // API for interacting with the tab via the cua api\\n  dev: TabDevAPI; // API for developer-oriented tab inspection.\\n  dom_cua: DomCUAAPI; // API for interacting with the tab via the dom based cua api\\n  id: string; // A tab's unique identifier\\n  playwright: PlaywrightAPI; // API for interacting with the tab via the playwright api\\n  back(): Promise<void>; // Navigate this tab back in history.\\n  close(): Promise<void>; // Close this tab.\\n  forward(): Promise<void>; // Navigate this tab forward in history.\\n  getJsDialog(): Promise<undefined | Dialog>; // Get the active JavaScript dialog for this tab, if one is currently open.\\n  goto(url: string): Promise<void>; // Open a URL in this tab.\\n  markDeliverable(): Promise<void>; // Keep this tab as a deliverable after the turn completes.\\n  markHandoff(): Promise<void>; // Keep this tab available for a later turn after the current turn completes.\\n  reload(): Promise<void>; // Reload this tab.\\n  requestManualHandoff(): Promise<void>; // Request manual user control of this Cloud Browser tab and mark it for handoff.\\n  screenshot(options: ScreenshotOptions): Promise<Uint8Array>; // Capture a screenshot of this tab.\\n  title(): Promise<undefined | string>; // Get the current title for this tab.\\n  url(): Promise<undefined | string>; // Get the current URL for this tab.\\n}\\n\\ninterface AXAPI {\\n  click(target: number | AXPoint, options?: AXClickOptions): Promise<void>; // Click an accessibility element or viewport coordinate.\\n  drag(from: AXPoint, to: AXPoint): Promise<void>; // Drag between two viewport coordinates.\\n  get(mode?: \\\"state\\\", options?: AXStateOptions): Promise<string>; // Return accessibility state without displaying it; prefer write() for model-visible observation.\\n  get(mode: \\\"screenshot\\\"): Promise<Uint8Array>; // Return screenshot bytes without displaying an image or advancing accessibility state.\\n  get(mode: \\\"both\\\", options?: AXStateOptions): Promise<{ screenshot?: Uint8Array; state: string }>; // Return accessibility state and screenshot bytes when available.\\n  paste(elementIndex: null | number, text: string, options?: AXPasteOptions): Promise<void>; // Paste through the browser session's virtual clipboard; null uses current focus.\\n  performSecondaryAction(elementIndex: number, action: string): Promise<void>; // Invoke an additional action exposed by an accessibility element.\\n  pressKey(elementIndex: null | number, key: string): Promise<void>; // If elementIndex is specified, attempt to focus the element prior to key entry.\\n  scroll(target: number | AXPoint, direction: AXDirection, pages?: number): Promise<void>; // Scroll an accessibility element or a viewport coordinate.\\n  selectText(elementIndex: number, text: string, options?: AXSelectTextOptions): Promise<void>; // Select text or position the cursor within an editable element.\\n  setValue(elementIndex: number, value: string): Promise<void>; // Set the value of an accessibility element.\\n  typeText(elementIndex: null | number, text: string): Promise<void>; // If elementIndex is specified, attempt to focus the element prior to text entry.\\n  write(mode?: \\\"state\\\", options?: AXStateOptions): Promise<void>; // Prefer this method to display current accessibility state to the model.\\n  write(mode: \\\"screenshot\\\"): Promise<void>; // Display a screenshot without advancing accessibility state.\\n  write(mode: \\\"both\\\", options?: AXStateOptions): Promise<void>; // Display accessibility state followed by its corresponding screenshot.\\n}\\n\\ninterface ContentAPI {\\n  export(): Promise<string>; // Export the tab's content to a file on disk using the default asset-loader path.\\n  exportGsuite(type: \\\"pdf\\\" | \\\"md\\\" | \\\"xlsx\\\" | \\\"csv\\\" | \\\"docx\\\" | \\\"pptx\\\"): Promise<string>; // Export a Google Workspace tab using an explicit GSuite export type.\\n  exportYouTubeTranscript(): Promise<string>; // Export an HTTPS youtube.com or www.youtube.com /watch transcript to a UTF-8 .txt file.\\n}\\n\\ninterface CUAAPI {\\n  click(options: ClickOptions): Promise<void>; // Click at a coordinate in the current viewport.\\n  double_click(options: DoubleClickOptions): Promise<void>; // Double click at a coordinate in the current viewport.\\n  drag(options: DragOptions): Promise<void>; // Drag from a point to a point by the provided path.\\n  keypress(options: KeypressOptions): Promise<void>; // Press control characters at the current focused element (focus it first via click/dblclick).\\n  move(options: MoveOptions): Promise<void>; // Move the mouse to a point by the provided x and y coordinates.\\n  scroll(options: ScrollOptions): Promise<void>; // Scroll by a delta from a specific viewport coordinate.\\n  type(options: TypeOptions): Promise<void>; // Type text at the current focus.\\n}\\n\\ninterface DomCUAAPI {\\n  click(options: DomClickOptions): Promise<void>; // Click a DOM node by its id from the visible DOM snapshot.\\n  double_click(options: DomClickOptions): Promise<void>; // Double-click a DOM node by its id.\\n  get_visible_dom(): Promise<unknown>; // Return a filtered DOM with node ids for interactable elements.\\n  keypress(options: DomKeypressOptions): Promise<void>; // Press control characters at the currently focused element (focus it first via click/dblclick).\\n  scroll(options: DomScrollOptions): Promise<void>; // Scroll either the page or a specific node (if node_id provided) by deltas.\\n  type(options: DomTypeOptions): Promise<void>; // Type text into the currently focused element (focus via click first).\\n}\\n\\ninterface PlaywrightAPI {\\n  domSnapshot(): Promise<string>; // Return a snapshot of the current DOM as a string, including expanded iframe body content when available.\\n  evaluate<TResult, TArg>(pageFunction: PlaywrightEvaluateFunction<TArg, TResult>, arg?: TArg, options?: PlaywrightEvaluateOptions): Promise<TResult>; // Evaluate JavaScript in a read-only page scope.\\n  expectNavigation<T>(action: () => Promise<T>, options: { timeoutMs?: number; url?: string; waitUntil?: LoadState }): Promise<T>; // Expect a navigation triggered by an action.\\n  frameLocator(frameSelector: string): PlaywrightFrameLocator; // Create a frame-scoped locator builder.\\n  getByLabel(text: TextMatcher, options: { exact?: boolean }): PlaywrightLocator; // Find elements by label text within the page.\\n  getByPlaceholder(text: TextMatcher, options: { exact?: boolean }): PlaywrightLocator; // Find elements by placeholder text within the page.\\n  getByRole(role: string, options: { exact?: boolean; name?: TextMatcher }): PlaywrightLocator; // Find elements by ARIA role within the page.\\n  getByTestId(testId: string): PlaywrightLocator; // Find elements by test id within the page.\\n  getByText(text: TextMatcher, options: { exact?: boolean }): PlaywrightLocator; // Find elements by text within the page.\\n  locator(selector: string): PlaywrightLocator; // Create a locator scoped to this tab.\\n  waitForEvent(event: \\\"download\\\", options?: WaitForEventOptions): Promise<PlaywrightDownload>; // Wait for the next download to complete; call before clicking its download control.\\n  waitForEvent(event: \\\"filechooser\\\", options?: WaitForEventOptions): Promise<PlaywrightFileChooser>; // Wait for a file chooser.\\n  waitForLoadState(options: PageWaitForLoadStateOptions): Promise<void>; // Wait for the page to reach a specific load state.\\n  waitForTimeout(timeoutMs: number): Promise<void>; // Wait for a fixed duration.\\n  waitForURL(url: string, options: PageWaitForURLOptions): Promise<void>; // Wait for the page URL to match the provided value.\\n}\\n\\ninterface PlaywrightFrameLocator {\\n  frameLocator(frameSelector: string): PlaywrightFrameLocator; // Create a locator scoped to a nested frame.\\n  getByLabel(text: TextMatcher, options: { exact?: boolean }): PlaywrightLocator; // Find elements by label within this frame.\\n  getByPlaceholder(text: TextMatcher, options: { exact?: boolean }): PlaywrightLocator; // Find elements by placeholder within this frame.\\n  getByRole(role: string, options: { exact?: boolean; name?: TextMatcher }): PlaywrightLocator; // Find elements by ARIA role within this frame.\\n  getByTestId(testId: string): PlaywrightLocator; // Find elements by test id within this frame.\\n  getByText(text: TextMatcher, options: { exact?: boolean }): PlaywrightLocator; // Find elements by text within this frame.\\n  locator(selector: string): PlaywrightLocator; // Create a locator scoped to this frame.\\n}\\n\\ninterface PlaywrightLocator {\\n  all(): Promise<Array<PlaywrightLocator>>; // Resolve to a list of locators for each matched element.\\n  allTextContents(options: { timeoutMs?: number }): Promise<Array<string>>; // Return `textContent` for *all* elements matched by this locator.\\n  and(locator: PlaywrightLocator): PlaywrightLocator; // Return a locator matching elements that satisfy both this locator and `locator`.\\n  check(options: LocatorCheckOptions): Promise<void>; // Check a checkbox or switch-like control.\\n  click(options: LocatorClickOptions): Promise<void>; // Click the element matched by this locator.\\n  count(): Promise<number>; // Number of elements matching this locator.\\n  dblclick(options: LocatorClickOptions): Promise<void>; // Double-click the element matched by this locator.\\n  downloadMedia(options: LocatorDownloadMediaOptions): Promise<string>; // Download the matched media or file link and return its saved file path.\\n  evaluate<TResult, TArg>(pageFunction: LocatorEvaluateFunction<TArg, TResult>, arg?: TArg, options?: PlaywrightEvaluateOptions): Promise<TResult>; // Evaluate JavaScript in a read-only scope; the locator must resolve unambiguously to one element.\\n  evaluateAll<TResult, TArg>(pageFunction: LocatorEvaluateAllFunction<TArg, TResult>, arg?: TArg, options?: PlaywrightEvaluateOptions): Promise<TResult>; // Evaluate read-only JavaScript against all elements matched by this locator.\\n  fill(value: string, options: { timeoutMs?: number }): Promise<void>; // Replace the element's value with the provided text.\\n  filter(options: LocatorFilterOptions): PlaywrightLocator; // Narrow this locator by additional constraints.\\n  first(): PlaywrightLocator; // Return a locator pointing at the first matched element.\\n  getAttribute(name: string, options: { timeoutMs?: number }): Promise<null | string>; // Return an attribute value from the first matched element.\\n  getByLabel(text: TextMatcher, options: { exact?: boolean }): PlaywrightLocator; // Find elements by label text, scoped to this locator.\\n  getByPlaceholder(text: TextMatcher, options: { exact?: boolean }): PlaywrightLocator; // Find elements by placeholder text, scoped to this locator.\\n  getByRole(role: string, options: { exact?: boolean; name?: TextMatcher }): PlaywrightLocator; // Find elements by ARIA role, scoped to this locator.\\n  getByTestId(testId: string): PlaywrightLocator; // Find elements by test id, scoped to this locator.\\n  getByText(text: TextMatcher, options: { exact?: boolean }): PlaywrightLocator; // Find elements by text content, scoped to this locator.\\n  innerText(options: { timeoutMs?: number }): Promise<string>; // Return the rendered (visible) text of the first matched element.\\n  isEnabled(): Promise<boolean>; // Whether the first matched element is currently enabled.\\n  isVisible(): Promise<boolean>; // Whether the first matched element is currently visible.\\n  last(): PlaywrightLocator; // Return a locator pointing at the last matched element.\\n  locator(selector: string, options: LocatorLocatorOptions): PlaywrightLocator; // Create a descendant locator scoped to this locator.\\n  nth(index: number): PlaywrightLocator; // Return a locator pointing at the Nth matched element.\\n  or(locator: PlaywrightLocator): PlaywrightLocator; // Return a locator matching elements that satisfy either this locator or `locator`.\\n  press(value: string, options: { timeoutMs?: number }): Promise<void>; // Press a keyboard key while this locator is focused.\\n  pressSequentially(value: string, options: LocatorPressSequentiallyOptions): Promise<void>; // Focus the element and press each character in the text sequentially without clearing its existing value.\\n  selectOption(value: SelectOptionInput | Array<SelectOptionInput>, options: { timeoutMs?: number }): Promise<void>; // Select one or more options on a native `<select>` element.\\n  setChecked(checked: boolean, options: LocatorCheckOptions): Promise<void>; // Set a checkbox or switch-like control to a checked/unchecked state.\\n  textContent(options: { timeoutMs?: number }): Promise<null | string>; // Return the raw textContent of the first matched element (or null if missing).\\n  type(value: string, options: { timeoutMs?: number }): Promise<void>; // Type text into the element without clearing existing content.\\n  uncheck(options: LocatorCheckOptions): Promise<void>; // Uncheck a checkbox or switch-like control.\\n  waitFor(options: LocatorWaitForOptions): Promise<void>; // Wait for the element to reach a specific state.\\n}\\n\\ninterface PlaywrightDownload {\\n  path(options: { timeoutMs?: number }): Promise<null | string>; // Return the local path to the downloaded file, if available.\\n}\\n\\ninterface PlaywrightFileChooser {\\n  isMultiple(): boolean; // Whether the input allows selecting multiple files.\\n  setFiles(files: FileChooserFiles, options: { timeoutMs?: number }): Promise<void>; // Set the files for this chooser using absolute paths visible to the browser.\\n}\\n\\ninterface TabClipboardAPI {\\n  read(): Promise<Array<TabClipboardItem>>; // Read clipboard items, including text and binary payloads.\\n  readText(): Promise<string>; // Read plain text from the browser clipboard.\\n  write(items: Array<TabClipboardItem>): Promise<void>; // Write clipboard items.\\n  writeText(text: string): Promise<void>; // Write plain text to the browser clipboard.\\n}\\n\\ninterface TabDevAPI {\\n  logs(options: TabDevLogsOptions): Promise<Array<TabDevLogEntry>>; // Read console log messages captured for this tab.\\n}\\n\\ninterface AlertDialog {\\n  type: \\\"alert\\\";\\n  dismiss(): Promise<void>;\\n}\\n\\ninterface BeforeUnloadDialog {\\n  type: \\\"beforeunload\\\";\\n  dismiss(): Promise<void>;\\n}\\n\\ninterface ConfirmDialog {\\n  type: \\\"confirm\\\";\\n  accept(): Promise<void>;\\n  dismiss(): Promise<void>;\\n}\\n\\ninterface Documentation {\\n  get(name: string): Promise<string>; // Read packaged documentation by its extensionless relative path.\\n}\\n\\ninterface PromptDialog {\\n  type: \\\"prompt\\\";\\n  accept(text: string): Promise<void>;\\n  dismiss(): Promise<void>;\\n}\\n\\ntype BrowserCapabilityCollection = {\\n  get(id: string): Promise<unknown>;\\n  list(): Promise<Array<{ id: string; description: string }>>;\\n};\\n\\ninterface BrowserHistoryOptions {\\n  from?: string | Date; // Lower bound for visit timestamps.\\n  limit?: number; // Maximum number of history entries to return.\\n  queries?: Array<string>; // Optional terms to filter browser history with.\\n  to?: string | Date; // Upper bound for visit timestamps.\\n}\\n\\ninterface BrowserHistoryEntry {\\n  dateVisited: string; // ISO 8601 timestamp for the visit.\\n  title?: string; // Page title captured for the visit.\\n  url: string; // Visited URL.\\n}\\n\\ninterface BrowserUserTabInfo {\\n  id: string; // Opaque identifier for this browser tab.\\n  lastOpened?: string; // ISO 8601 timestamp for the last time the tab was opened or focused.\\n  providerTabId?: string; // Provider-owned identity for correlating an explicit reference with this fresh listing.\\n  tabGroup?: string; // User-visible tab group name when the tab belongs to one.\\n  title?: string; // User-visible tab title.\\n  url?: string; // Current tab URL.\\n}\\n\\ninterface TabsContentOptions {\\n  contentType: TabsContentType; // Content representation to extract from each page.\\n  timeoutMs?: number; // Maximum time to wait for each page load, in milliseconds.\\n  urls: Array<string>; // URLs to load in temporary background tabs.\\n}\\n\\ninterface TabsContentResult {\\n  content: null | string; // Extracted page content or null if the page failed to load or extract.\\n  title: null | string; // The resolved page title when available.\\n  url: string; // The resolved page URL when available, otherwise the requested URL.\\n}\\n\\ninterface TabInfo {\\n  id: string; // Metadata describing an open tab.\\n  providerTabId?: string; // Provider-owned identifier for matching an explicitly mentioned tab.\\n  title?: string;\\n  url?: string;\\n}\\n\\ntype TabCapabilityCollection = {\\n  get(id: string): Promise<unknown>;\\n  list(): Promise<Array<{ id: string; description: string }>>;\\n};\\n\\ntype Dialog = AlertDialog | BeforeUnloadDialog | ConfirmDialog | PromptDialog;\\n\\ntype ScreenshotOptions = {\\n  clip?: ClipRect; // Crop to a specific rectangle instead of the full viewport.\\n  fullPage?: boolean; // Capture the full page instead of the viewport.\\n};\\n\\ntype AXPoint = [unknown, unknown];\\n\\ntype AXClickOptions = {\\n  clickCount?: number;\\n  mouseButton?: AXMouseButton;\\n};\\n\\ntype AXStateOptions = {\\n  disableDiffing?: boolean;\\n};\\n\\ntype AXPasteOptions = {\\n  format?: \\\"text\\\" | \\\"md\\\" | \\\"html\\\";\\n};\\n\\ntype AXDirection = \\\"up\\\" | \\\"down\\\" | \\\"left\\\" | \\\"right\\\" | \\\"u\\\" | \\\"d\\\" | \\\"l\\\" | \\\"r\\\";\\n\\ntype AXSelectTextOptions = {\\n  prefix?: string;\\n  selectionType?: AXSelectionType;\\n  suffix?: string;\\n};\\n\\ntype ClickOptions = {\\n  button?: number; // Mouse button (1-left, 2-middle/wheel, 3-right, 4-back, 5-forward).\\n  keypress?: Array<string>; // Modifier keys held during the click.\\n  x: number;\\n  y: number;\\n};\\n\\ntype DoubleClickOptions = {\\n  keypress?: Array<string>; // Modifier keys held during the double click.\\n  x: number;\\n  y: number;\\n};\\n\\ntype DragOptions = {\\n  keys?: Array<string>; // Optional modifier keys held during the drag.\\n  path: Array<{ x: number; y: number }>; // Drag path as a list of points.\\n};\\n\\ntype KeypressOptions = {\\n  keys: Array<string>; // Key combination to press.\\n};\\n\\ntype MoveOptions = {\\n  keys?: Array<string>; // Optional modifier keys held while moving.\\n  x: number;\\n  y: number;\\n};\\n\\ntype ScrollOptions = {\\n  keypress?: Array<string>; // Modifier keys held during scroll.\\n  scrollX: number;\\n  scrollY: number;\\n  x: number;\\n  y: number;\\n};\\n\\ntype TypeOptions = {\\n  text: string;\\n};\\n\\ntype DomClickOptions = {\\n  node_id: string; // Node id from `get_visible_dom()`.\\n};\\n\\ntype DomKeypressOptions = {\\n  keys: Array<string>; // Key combination to press.\\n};\\n\\ntype DomScrollOptions = {\\n  node_id?: string; // Optional node id to scroll within.\\n  x: number; // Horizontal scroll delta.\\n  y: number; // Vertical scroll delta.\\n};\\n\\ntype DomTypeOptions = {\\n  text: string; // Text to type into the currently focused element.\\n};\\n\\ntype PlaywrightEvaluateFunction<TArg, TResult> = string | (arg: TArg) => TResult | Promise<TResult>;\\n\\ntype PlaywrightEvaluateOptions = {\\n  timeoutMs?: number; // Maximum time to spend setting up the read-only DOM scope and running the script.\\n};\\n\\ntype LoadState = \\\"load\\\" | \\\"domcontentloaded\\\" | \\\"networkidle\\\";\\n\\ntype TextMatcher = string | RegExp;\\n\\ntype WaitForEventOptions = {\\n  timeoutMs?: number;\\n};\\n\\ntype PageWaitForLoadStateOptions = {\\n  state?: LoadState;\\n  timeoutMs?: number;\\n};\\n\\ntype PageWaitForURLOptions = {\\n  timeoutMs?: number;\\n  waitUntil?: WaitUntil;\\n};\\n\\ntype LocatorCheckOptions = {\\n  force?: boolean;\\n  timeoutMs?: number;\\n};\\n\\ntype LocatorClickOptions = {\\n  button?: MouseButton;\\n  force?: boolean;\\n  modifiers?: Array<KeyboardModifier>;\\n  timeoutMs?: number;\\n};\\n\\ntype LocatorDownloadMediaOptions = {\\n  timeoutMs?: number; // Download timeout in milliseconds; defaults to 120000, excluding permission prompts.\\n};\\n\\ntype LocatorEvaluateFunction<TArg, TResult> = string | (element: Element, arg: TArg) => TResult | Promise<TResult>;\\n\\ntype LocatorEvaluateAllFunction<TArg, TResult> = string | (elements: Array<Element>, arg: TArg) => TResult | Promise<TResult>;\\n\\ntype LocatorFilterOptions = {\\n  has?: PlaywrightLocator;\\n  hasNot?: PlaywrightLocator;\\n  hasNotText?: TextMatcher;\\n  hasText?: TextMatcher;\\n  visible?: boolean;\\n};\\n\\ntype LocatorLocatorOptions = {\\n  has?: PlaywrightLocator;\\n  hasNot?: PlaywrightLocator;\\n  hasNotText?: TextMatcher;\\n  hasText?: TextMatcher;\\n};\\n\\ntype LocatorPressSequentiallyOptions = {\\n  timeoutMs?: number;\\n};\\n\\ntype SelectOptionInput = string | SelectOptionDescriptor;\\n\\ntype LocatorWaitForOptions = {\\n  state: WaitForState;\\n  timeoutMs?: number;\\n};\\n\\ntype FileChooserFiles = string | Array<string>;\\n\\ntype TabClipboardItem = {\\n  entries: Array<TabClipboardEntry>;\\n  presentationStyle?: \\\"unspecified\\\" | \\\"inline\\\" | \\\"attachment\\\";\\n};\\n\\ninterface TabDevLogsOptions {\\n  filter?: string; // Optional substring filter applied to the rendered log message.\\n  levels?: Array<\\\"debug\\\" | \\\"info\\\" | \\\"log\\\" | \\\"warn\\\" | \\\"error\\\" | \\\"warning\\\">; // Optional levels to include.\\n  limit?: number; // Maximum number of logs to return.\\n}\\n\\ninterface TabDevLogEntry {\\n  level: \\\"debug\\\" | \\\"info\\\" | \\\"log\\\" | \\\"warn\\\" | \\\"error\\\"; // Console log level.\\n  message: string; // Rendered log message text.\\n  timestamp: string; // ISO 8601 timestamp for when the runtime captured the log.\\n  url?: string; // Source URL reported by the browser runtime, when available.\\n}\\n\\ntype TabsContentType = \\\"html\\\" | \\\"text\\\" | \\\"domSnapshot\\\";\\n\\ntype ClipRect = {\\n  height: number;\\n  width: number;\\n  x: number;\\n  y: number;\\n};\\n\\ntype AXMouseButton = \\\"left\\\" | \\\"right\\\" | \\\"middle\\\" | \\\"l\\\" | \\\"r\\\" | \\\"m\\\";\\n\\ntype AXSelectionType = \\\"text\\\" | \\\"cursor_before\\\" | \\\"cursor_after\\\";\\n\\ntype WaitUntil = LoadState | \\\"commit\\\";\\n\\ntype MouseButton = \\\"left\\\" | \\\"right\\\" | \\\"middle\\\";\\n\\ntype KeyboardModifier = \\\"Alt\\\" | \\\"Control\\\" | \\\"ControlOrMeta\\\" | \\\"Meta\\\" | \\\"Shift\\\";\\n\\ntype SelectOptionDescriptor = {\\n  index?: number;\\n  label?: string;\\n  value?: string;\\n};\\n\\ntype WaitForState = \\\"attached\\\" | \\\"detached\\\" | \\\"visible\\\" | \\\"hidden\\\";\\n\\ntype TabClipboardEntry = {\\n  base64?: string;\\n  mimeType: string;\\n  text?: string;\\n};\\n```\\n\"}"
+      }
+    ]
+  },
+  {
+    "name": "browser.user.openTabs",
+    "code": "// Reproduction example; connect browser/tab to the fixture first.\n// AX element numbers are from the recorded run: refresh before reuse.\nconst result = await browser.user.openTabs();\nnodeRepl.write({kind: result === undefined ? \"undefined\" : typeof result, value: result === null || [\"string\",\"boolean\",\"number\"].includes(typeof result) ? result : undefined, length: Array.isArray(result) || result instanceof Uint8Array ? result.length : undefined});\n",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "{\"kind\":\"object\",\"length\":2}"
+      }
+    ]
+  },
+  {
+    "name": "browser.tabs.list",
+    "code": "// Reproduction example; connect browser/tab to the fixture first.\n// AX element numbers are from the recorded run: refresh before reuse.\nconst result = await browser.tabs.list();\nnodeRepl.write({kind: result === undefined ? \"undefined\" : typeof result, value: result === null || [\"string\",\"boolean\",\"number\"].includes(typeof result) ? result : undefined, length: Array.isArray(result) || result instanceof Uint8Array ? result.length : undefined});\n",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "{\"kind\":\"object\",\"length\":2}"
+      }
+    ]
+  },
+  {
+    "name": "tab.screenshot",
+    "code": "// Reproduction example; connect browser/tab to the fixture first.\n// AX element numbers are from the recorded run: refresh before reuse.\nconst result = await tab.screenshot({ fullPage: false });\nnodeRepl.write({kind: result === undefined ? \"undefined\" : typeof result, value: result === null || [\"string\",\"boolean\",\"number\"].includes(typeof result) ? result : undefined, length: Array.isArray(result) || result instanceof Uint8Array ? result.length : undefined});\n",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "{\"kind\":\"object\",\"length\":43479}"
+      }
+    ]
+  },
+  {
+    "name": "tab.title",
+    "code": "// Reproduction example; connect browser/tab to the fixture first.\n// AX element numbers are from the recorded run: refresh before reuse.\nconst result = await tab.title();\nnodeRepl.write({kind: result === undefined ? \"undefined\" : typeof result, value: result === null || [\"string\",\"boolean\",\"number\"].includes(typeof result) ? result : undefined, length: Array.isArray(result) || result instanceof Uint8Array ? result.length : undefined});\n",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "{\"kind\":\"string\",\"value\":\"Browser Tool Audit\"}"
+      }
+    ]
+  },
+  {
+    "name": "tab.url",
+    "code": "// Reproduction example; connect browser/tab to the fixture first.\n// AX element numbers are from the recorded run: refresh before reuse.\nconst result = await tab.url();\nnodeRepl.write({kind: result === undefined ? \"undefined\" : typeof result, value: result === null || [\"string\",\"boolean\",\"number\"].includes(typeof result) ? result : undefined, length: Array.isArray(result) || result instanceof Uint8Array ? result.length : undefined});\n",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "{\"kind\":\"string\",\"value\":\"http://127.0.0.1:29653/\"}"
+      }
+    ]
+  },
+  {
+    "name": "tab.playwright.domSnapshot",
+    "code": "// Reproduction example; connect browser/tab to the fixture first.\n// AX element numbers are from the recorded run: refresh before reuse.\nconst result = await tab.playwright.domSnapshot();\nnodeRepl.write({kind: result === undefined ? \"undefined\" : typeof result, value: result === null || [\"string\",\"boolean\",\"number\"].includes(typeof result) ? result : undefined, length: Array.isArray(result) || result instanceof Uint8Array ? result.length : undefined});\n",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "{\"kind\":\"string\",\"value\":\"- heading \\\"Browser Tool Audit\\\" [level=1]\\n- paragraph: 로컬 테스트 페이지 · 계정/결제 없음\\n- text: Name\\n- textbox \\\"Name\\\":\\n  - /placeholder: Enter name\\n- text: Notes\\n- textbox \\\"Notes\\\": initial notes\\n- checkbox \\\"Agree\\\"\\n- text: Agree\\n- combobox \\\"Choice\\\":\\n  - option \\\"Alpha\\\" [selected]\\n  - option \\\"Beta\\\"\\n- button \\\"Increment\\\"\\n- status: \\\"0\\\"\\n- button \\\"Disabled\\\" [disabled]\\n- button \\\"Next page\\\"\\n- list:\\n  - listitem: Apple\\n  - listitem: Banana\\n  - listitem: Carrot\\n- generic \\\"Details\\\"\\n- button \\\"Alert\\\"\\n- button \\\"Confirm\\\"\\n- button \\\"Prompt\\\"\\n- button \\\"Arm beforeunload\\\"\\n- status: none\\n- button \\\"Upload single\\\"\\n- button \\\"Upload multiple\\\"\\n- status: none\\n- link \\\"Download sample\\\":\\n  - /url: /sample.txt\\n- link \\\"Download image\\\":\\n  - /url: /pixel.png\\n- img \\\"Audit pixel\\\"\\n- generic: Drag me\\n- generic: Drop here\\n- status: none\\n- iframe:\\n  - button \\\"Frame button\\\"\\n  - text: Frame name\\n  - textbox \\\"Frame name\\\":\\n    - /placeholder: Frame placeholder\\n  - paragraph: Frame text\\n  - iframe:\\n    - paragraph: Nested text\\n- button \\\"Bottom button\\\"\"}"
+      }
+    ]
+  },
+  {
+    "name": "tab.playwright.evaluate",
+    "code": "// Reproduction example; connect browser/tab to the fixture first.\n// AX element numbers are from the recorded run: refresh before reuse.\nconst result = await tab.playwright.evaluate(() => ({ title: document.title, itemCount: document.querySelectorAll(\".item\").length }));\nnodeRepl.write({kind: result === undefined ? \"undefined\" : typeof result, value: result === null || [\"string\",\"boolean\",\"number\"].includes(typeof result) ? result : undefined, length: Array.isArray(result) || result instanceof Uint8Array ? result.length : undefined});\n",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "{\"kind\":\"object\"}"
+      }
+    ]
+  },
+  {
+    "name": "tab.playwright.frameLocator",
+    "code": "// Reproduction example; connect browser/tab to the fixture first.\n// AX element numbers are from the recorded run: refresh before reuse.\nconst result = tab.playwright.frameLocator('iframe[title=\"Audit frame\"]');\nnodeRepl.write({kind: result === undefined ? \"undefined\" : typeof result, value: result === null || [\"string\",\"boolean\",\"number\"].includes(typeof result) ? result : undefined, length: Array.isArray(result) || result instanceof Uint8Array ? result.length : undefined});\n",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "{\"kind\":\"object\"}"
+      }
+    ]
+  },
+  {
+    "name": "tab.playwright.getByLabel",
+    "code": "// Reproduction example; connect browser/tab to the fixture first.\n// AX element numbers are from the recorded run: refresh before reuse.\nconst result = tab.playwright.getByLabel(\"Name\", { exact: true });\nnodeRepl.write({kind: result === undefined ? \"undefined\" : typeof result, value: result === null || [\"string\",\"boolean\",\"number\"].includes(typeof result) ? result : undefined, length: Array.isArray(result) || result instanceof Uint8Array ? result.length : undefined});\n",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "{\"kind\":\"object\"}"
+      }
+    ]
+  },
+  {
+    "name": "tab.playwright.getByPlaceholder",
+    "code": "// Reproduction example; connect browser/tab to the fixture first.\n// AX element numbers are from the recorded run: refresh before reuse.\nconst result = tab.playwright.getByPlaceholder(\"Enter name\", { exact: true });\nnodeRepl.write({kind: result === undefined ? \"undefined\" : typeof result, value: result === null || [\"string\",\"boolean\",\"number\"].includes(typeof result) ? result : undefined, length: Array.isArray(result) || result instanceof Uint8Array ? result.length : undefined});\n",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "{\"kind\":\"object\"}"
+      }
+    ]
+  },
+  {
+    "name": "tab.playwright.getByRole",
+    "code": "// Reproduction example; connect browser/tab to the fixture first.\n// AX element numbers are from the recorded run: refresh before reuse.\nconst result = tab.playwright.getByRole(\"textbox\", { name: \"Name\", exact: true });\nnodeRepl.write({kind: result === undefined ? \"undefined\" : typeof result, value: result === null || [\"string\",\"boolean\",\"number\"].includes(typeof result) ? result : undefined, length: Array.isArray(result) || result instanceof Uint8Array ? result.length : undefined});\n",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "{\"kind\":\"object\"}"
+      }
+    ]
+  },
+  {
+    "name": "tab.playwright.getByTestId",
+    "code": "// Reproduction example; connect browser/tab to the fixture first.\n// AX element numbers are from the recorded run: refresh before reuse.\nconst result = tab.playwright.getByTestId(\"name-input\");\nnodeRepl.write({kind: result === undefined ? \"undefined\" : typeof result, value: result === null || [\"string\",\"boolean\",\"number\"].includes(typeof result) ? result : undefined, length: Array.isArray(result) || result instanceof Uint8Array ? result.length : undefined});\n",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "{\"kind\":\"object\"}"
+      }
+    ]
+  },
+  {
+    "name": "tab.playwright.getByText",
+    "code": "// Reproduction example; connect browser/tab to the fixture first.\n// AX element numbers are from the recorded run: refresh before reuse.\nconst result = tab.playwright.getByText(\"Apple\", { exact: true });\nnodeRepl.write({kind: result === undefined ? \"undefined\" : typeof result, value: result === null || [\"string\",\"boolean\",\"number\"].includes(typeof result) ? result : undefined, length: Array.isArray(result) || result instanceof Uint8Array ? result.length : undefined});\n",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "{\"kind\":\"object\"}"
+      }
+    ]
+  },
+  {
+    "name": "tab.playwright.locator",
+    "code": "// Reproduction example; connect browser/tab to the fixture first.\n// AX element numbers are from the recorded run: refresh before reuse.\nconst result = tab.playwright.locator(\".item\");\nnodeRepl.write({kind: result === undefined ? \"undefined\" : typeof result, value: result === null || [\"string\",\"boolean\",\"number\"].includes(typeof result) ? result : undefined, length: Array.isArray(result) || result instanceof Uint8Array ? result.length : undefined});\n",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "{\"kind\":\"object\"}"
+      }
+    ]
+  },
+  {
+    "name": "frame.frameLocator",
+    "code": "// Reproduction example; connect browser/tab to the fixture first.\n// AX element numbers are from the recorded run: refresh before reuse.\nconst frame = tab.playwright.frameLocator('iframe[title=\"Audit frame\"]');\nconst result = frame.frameLocator('iframe[title=\"Nested frame\"]');\nnodeRepl.write({kind: result === undefined ? \"undefined\" : typeof result, value: result === null || [\"string\",\"boolean\",\"number\"].includes(typeof result) ? result : undefined, length: Array.isArray(result) || result instanceof Uint8Array ? result.length : undefined});\n",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "{\"kind\":\"object\"}"
+      }
+    ]
+  },
+  {
+    "name": "frame.getByLabel",
+    "code": "// Reproduction example; connect browser/tab to the fixture first.\n// AX element numbers are from the recorded run: refresh before reuse.\nconst frame = tab.playwright.frameLocator('iframe[title=\"Audit frame\"]');\nconst result = frame.getByLabel(\"Frame name\", { exact: true });\nnodeRepl.write({kind: result === undefined ? \"undefined\" : typeof result, value: result === null || [\"string\",\"boolean\",\"number\"].includes(typeof result) ? result : undefined, length: Array.isArray(result) || result instanceof Uint8Array ? result.length : undefined});\n",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "{\"kind\":\"object\"}"
+      }
+    ]
+  },
+  {
+    "name": "frame.getByPlaceholder",
+    "code": "// Reproduction example; connect browser/tab to the fixture first.\n// AX element numbers are from the recorded run: refresh before reuse.\nconst frame = tab.playwright.frameLocator('iframe[title=\"Audit frame\"]');\nconst result = frame.getByPlaceholder(\"Frame placeholder\", { exact: true });\nnodeRepl.write({kind: result === undefined ? \"undefined\" : typeof result, value: result === null || [\"string\",\"boolean\",\"number\"].includes(typeof result) ? result : undefined, length: Array.isArray(result) || result instanceof Uint8Array ? result.length : undefined});\n",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "{\"kind\":\"object\"}"
+      }
+    ]
+  },
+  {
+    "name": "frame.getByRole",
+    "code": "// Reproduction example; connect browser/tab to the fixture first.\n// AX element numbers are from the recorded run: refresh before reuse.\nconst frame = tab.playwright.frameLocator('iframe[title=\"Audit frame\"]');\nconst result = frame.getByRole(\"button\", { name: \"Frame button\", exact: true });\nnodeRepl.write({kind: result === undefined ? \"undefined\" : typeof result, value: result === null || [\"string\",\"boolean\",\"number\"].includes(typeof result) ? result : undefined, length: Array.isArray(result) || result instanceof Uint8Array ? result.length : undefined});\n",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "{\"kind\":\"object\"}"
+      }
+    ]
+  },
+  {
+    "name": "frame.getByTestId",
+    "code": "// Reproduction example; connect browser/tab to the fixture first.\n// AX element numbers are from the recorded run: refresh before reuse.\nconst frame = tab.playwright.frameLocator('iframe[title=\"Audit frame\"]');\nconst result = frame.getByTestId(\"frame-input\");\nnodeRepl.write({kind: result === undefined ? \"undefined\" : typeof result, value: result === null || [\"string\",\"boolean\",\"number\"].includes(typeof result) ? result : undefined, length: Array.isArray(result) || result instanceof Uint8Array ? result.length : undefined});\n",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "{\"kind\":\"object\"}"
+      }
+    ]
+  },
+  {
+    "name": "frame.getByText",
+    "code": "// Reproduction example; connect browser/tab to the fixture first.\n// AX element numbers are from the recorded run: refresh before reuse.\nconst frame = tab.playwright.frameLocator('iframe[title=\"Audit frame\"]');\nconst result = frame.getByText(\"Frame text\", { exact: true });\nnodeRepl.write({kind: result === undefined ? \"undefined\" : typeof result, value: result === null || [\"string\",\"boolean\",\"number\"].includes(typeof result) ? result : undefined, length: Array.isArray(result) || result instanceof Uint8Array ? result.length : undefined});\n",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "{\"kind\":\"object\"}"
+      }
+    ]
+  },
+  {
+    "name": "frame.locator",
+    "code": "// Reproduction example; connect browser/tab to the fixture first.\n// AX element numbers are from the recorded run: refresh before reuse.\nconst frame = tab.playwright.frameLocator('iframe[title=\"Audit frame\"]');\nconst result = frame.locator(\"input\");\nnodeRepl.write({kind: result === undefined ? \"undefined\" : typeof result, value: result === null || [\"string\",\"boolean\",\"number\"].includes(typeof result) ? result : undefined, length: Array.isArray(result) || result instanceof Uint8Array ? result.length : undefined});\n",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "{\"kind\":\"object\"}"
+      }
+    ]
+  },
+  {
+    "name": "locator.all",
+    "code": "// Reproduction example; connect browser/tab to the fixture first.\n// AX element numbers are from the recorded run: refresh before reuse.\nconst locator = tab.playwright.locator(\".item\");\nconst result = await locator.all();\nnodeRepl.write({kind: result === undefined ? \"undefined\" : typeof result, value: result === null || [\"string\",\"boolean\",\"number\"].includes(typeof result) ? result : undefined, length: Array.isArray(result) || result instanceof Uint8Array ? result.length : undefined});\n",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "{\"kind\":\"object\",\"length\":3}"
+      }
+    ]
+  },
+  {
+    "name": "locator.allTextContents",
+    "code": "// Reproduction example; connect browser/tab to the fixture first.\n// AX element numbers are from the recorded run: refresh before reuse.\nconst locator = tab.playwright.locator(\".item\");\nconst result = await locator.allTextContents();\nnodeRepl.write({kind: result === undefined ? \"undefined\" : typeof result, value: result === null || [\"string\",\"boolean\",\"number\"].includes(typeof result) ? result : undefined, length: Array.isArray(result) || result instanceof Uint8Array ? result.length : undefined});\n",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "{\"kind\":\"object\",\"length\":3}"
+      }
+    ]
+  },
+  {
+    "name": "locator.and",
+    "code": "// Reproduction example; connect browser/tab to the fixture first.\n// AX element numbers are from the recorded run: refresh before reuse.\nconst locator = tab.playwright.locator(\".item\");\nconst result = locator.and(tab.playwright.locator('[data-kind=\"fruit\"]'));\nnodeRepl.write({kind: result === undefined ? \"undefined\" : typeof result, value: result === null || [\"string\",\"boolean\",\"number\"].includes(typeof result) ? result : undefined, length: Array.isArray(result) || result instanceof Uint8Array ? result.length : undefined});\n",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "{\"kind\":\"object\"}"
+      }
+    ]
+  },
+  {
+    "name": "locator.check",
+    "code": "// Reproduction example; connect browser/tab to the fixture first.\n// AX element numbers are from the recorded run: refresh before reuse.\nconst locator = tab.playwright.getByRole(\"checkbox\", { name: \"Agree\" });\nconst result = await locator.check();\nnodeRepl.write({kind: result === undefined ? \"undefined\" : typeof result, value: result === null || [\"string\",\"boolean\",\"number\"].includes(typeof result) ? result : undefined, length: Array.isArray(result) || result instanceof Uint8Array ? result.length : undefined});\n",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "{\"kind\":\"undefined\"}"
+      }
+    ]
+  },
+  {
+    "name": "locator.click",
+    "code": "// Reproduction example; connect browser/tab to the fixture first.\n// AX element numbers are from the recorded run: refresh before reuse.\nconst locator = tab.playwright.getByRole(\"button\", { name: \"Increment\", exact: true });\nconst result = await locator.click();\nnodeRepl.write({kind: result === undefined ? \"undefined\" : typeof result, value: result === null || [\"string\",\"boolean\",\"number\"].includes(typeof result) ? result : undefined, length: Array.isArray(result) || result instanceof Uint8Array ? result.length : undefined});\n",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "{\"kind\":\"undefined\"}"
+      }
+    ]
+  },
+  {
+    "name": "locator.count",
+    "code": "// Reproduction example; connect browser/tab to the fixture first.\n// AX element numbers are from the recorded run: refresh before reuse.\nconst locator = tab.playwright.locator(\".item\");\nconst result = await locator.count();\nnodeRepl.write({kind: result === undefined ? \"undefined\" : typeof result, value: result === null || [\"string\",\"boolean\",\"number\"].includes(typeof result) ? result : undefined, length: Array.isArray(result) || result instanceof Uint8Array ? result.length : undefined});\n",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "{\"kind\":\"number\",\"value\":3}"
+      }
+    ]
+  },
+  {
+    "name": "locator.dblclick",
+    "code": "// Reproduction example; connect browser/tab to the fixture first.\n// AX element numbers are from the recorded run: refresh before reuse.\nconst locator = tab.playwright.getByRole(\"button\", { name: \"Increment\", exact: true });\nconst result = await locator.dblclick();\nnodeRepl.write({kind: result === undefined ? \"undefined\" : typeof result, value: result === null || [\"string\",\"boolean\",\"number\"].includes(typeof result) ? result : undefined, length: Array.isArray(result) || result instanceof Uint8Array ? result.length : undefined});\n",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "{\"kind\":\"undefined\"}"
+      }
+    ]
+  },
+  {
+    "name": "locator.evaluate",
+    "code": "// Reproduction example; connect browser/tab to the fixture first.\n// AX element numbers are from the recorded run: refresh before reuse.\nconst locator = tab.playwright.getByRole(\"textbox\", { name: \"Name\", exact: true });\nconst result = await locator.evaluate(el => el.tagName);\nnodeRepl.write({kind: result === undefined ? \"undefined\" : typeof result, value: result === null || [\"string\",\"boolean\",\"number\"].includes(typeof result) ? result : undefined, length: Array.isArray(result) || result instanceof Uint8Array ? result.length : undefined});\n",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "{\"kind\":\"string\",\"value\":\"INPUT\"}"
+      }
+    ]
+  },
+  {
+    "name": "locator.evaluateAll",
+    "code": "// Reproduction example; connect browser/tab to the fixture first.\n// AX element numbers are from the recorded run: refresh before reuse.\nconst locator = tab.playwright.locator(\".item\");\nconst result = await locator.evaluateAll(els => els.map(el => el.textContent));\nnodeRepl.write({kind: result === undefined ? \"undefined\" : typeof result, value: result === null || [\"string\",\"boolean\",\"number\"].includes(typeof result) ? result : undefined, length: Array.isArray(result) || result instanceof Uint8Array ? result.length : undefined});\n",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "{\"kind\":\"object\",\"length\":3}"
+      }
+    ]
+  },
+  {
+    "name": "locator.fill",
+    "code": "// Reproduction example; connect browser/tab to the fixture first.\n// AX element numbers are from the recorded run: refresh before reuse.\nconst locator = tab.playwright.getByRole(\"textbox\", { name: \"Name\", exact: true });\nconst result = await locator.fill(\"audit fill\");\nnodeRepl.write({kind: result === undefined ? \"undefined\" : typeof result, value: result === null || [\"string\",\"boolean\",\"number\"].includes(typeof result) ? result : undefined, length: Array.isArray(result) || result instanceof Uint8Array ? result.length : undefined});\n",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "{\"kind\":\"undefined\"}"
+      }
+    ]
+  },
+  {
+    "name": "locator.filter",
+    "code": "// Reproduction example; connect browser/tab to the fixture first.\n// AX element numbers are from the recorded run: refresh before reuse.\nconst locator = tab.playwright.locator(\".item\");\nconst result = locator.filter({ hasText: \"Banana\" });\nnodeRepl.write({kind: result === undefined ? \"undefined\" : typeof result, value: result === null || [\"string\",\"boolean\",\"number\"].includes(typeof result) ? result : undefined, length: Array.isArray(result) || result instanceof Uint8Array ? result.length : undefined});\n",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "{\"kind\":\"object\"}"
+      }
+    ]
+  },
+  {
+    "name": "locator.first",
+    "code": "// Reproduction example; connect browser/tab to the fixture first.\n// AX element numbers are from the recorded run: refresh before reuse.\nconst locator = tab.playwright.locator(\".item\");\nconst result = await locator.first();\nnodeRepl.write({kind: result === undefined ? \"undefined\" : typeof result, value: result === null || [\"string\",\"boolean\",\"number\"].includes(typeof result) ? result : undefined, length: Array.isArray(result) || result instanceof Uint8Array ? result.length : undefined});\n",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "{\"kind\":\"object\"}"
+      }
+    ]
+  },
+  {
+    "name": "locator.getAttribute",
+    "code": "// Reproduction example; connect browser/tab to the fixture first.\n// AX element numbers are from the recorded run: refresh before reuse.\nconst locator = tab.playwright.getByRole(\"textbox\", { name: \"Name\", exact: true });\nconst result = await locator.getAttribute(\"placeholder\");\nnodeRepl.write({kind: result === undefined ? \"undefined\" : typeof result, value: result === null || [\"string\",\"boolean\",\"number\"].includes(typeof result) ? result : undefined, length: Array.isArray(result) || result instanceof Uint8Array ? result.length : undefined});\n",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "{\"kind\":\"string\",\"value\":\"Enter name\"}"
+      }
+    ]
+  },
+  {
+    "name": "locator.getByLabel",
+    "code": "// Reproduction example; connect browser/tab to the fixture first.\n// AX element numbers are from the recorded run: refresh before reuse.\nconst locator = tab.playwright.locator(\"section\").first();\nconst result = locator.getByLabel(\"Name\", { exact: true });\nnodeRepl.write({kind: result === undefined ? \"undefined\" : typeof result, value: result === null || [\"string\",\"boolean\",\"number\"].includes(typeof result) ? result : undefined, length: Array.isArray(result) || result instanceof Uint8Array ? result.length : undefined});\n",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "{\"kind\":\"object\"}"
+      }
+    ]
+  },
+  {
+    "name": "locator.getByPlaceholder",
+    "code": "// Reproduction example; connect browser/tab to the fixture first.\n// AX element numbers are from the recorded run: refresh before reuse.\nconst locator = tab.playwright.locator(\"section\").first();\nconst result = locator.getByPlaceholder(\"Enter name\", { exact: true });\nnodeRepl.write({kind: result === undefined ? \"undefined\" : typeof result, value: result === null || [\"string\",\"boolean\",\"number\"].includes(typeof result) ? result : undefined, length: Array.isArray(result) || result instanceof Uint8Array ? result.length : undefined});\n",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "{\"kind\":\"object\"}"
+      }
+    ]
+  },
+  {
+    "name": "locator.getByRole",
+    "code": "// Reproduction example; connect browser/tab to the fixture first.\n// AX element numbers are from the recorded run: refresh before reuse.\nconst locator = tab.playwright.locator(\"section\").first();\nconst result = locator.getByRole(\"button\", { name: \"Increment\", exact: true });\nnodeRepl.write({kind: result === undefined ? \"undefined\" : typeof result, value: result === null || [\"string\",\"boolean\",\"number\"].includes(typeof result) ? result : undefined, length: Array.isArray(result) || result instanceof Uint8Array ? result.length : undefined});\n",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "{\"kind\":\"object\"}"
+      }
+    ]
+  },
+  {
+    "name": "locator.getByTestId",
+    "code": "// Reproduction example; connect browser/tab to the fixture first.\n// AX element numbers are from the recorded run: refresh before reuse.\nconst locator = tab.playwright.locator(\"section\").first();\nconst result = locator.getByTestId(\"increment\");\nnodeRepl.write({kind: result === undefined ? \"undefined\" : typeof result, value: result === null || [\"string\",\"boolean\",\"number\"].includes(typeof result) ? result : undefined, length: Array.isArray(result) || result instanceof Uint8Array ? result.length : undefined});\n",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "{\"kind\":\"object\"}"
+      }
+    ]
+  },
+  {
+    "name": "locator.getByText",
+    "code": "// Reproduction example; connect browser/tab to the fixture first.\n// AX element numbers are from the recorded run: refresh before reuse.\nconst locator = tab.playwright.locator(\"section\").first();\nconst result = locator.getByText(\"Increment\", { exact: true });\nnodeRepl.write({kind: result === undefined ? \"undefined\" : typeof result, value: result === null || [\"string\",\"boolean\",\"number\"].includes(typeof result) ? result : undefined, length: Array.isArray(result) || result instanceof Uint8Array ? result.length : undefined});\n",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "{\"kind\":\"object\"}"
+      }
+    ]
+  },
+  {
+    "name": "locator.innerText",
+    "code": "// Reproduction example; connect browser/tab to the fixture first.\n// AX element numbers are from the recorded run: refresh before reuse.\nconst locator = tab.playwright.locator(\".item\").nth(1);\nconst result = await locator.innerText();\nnodeRepl.write({kind: result === undefined ? \"undefined\" : typeof result, value: result === null || [\"string\",\"boolean\",\"number\"].includes(typeof result) ? result : undefined, length: Array.isArray(result) || result instanceof Uint8Array ? result.length : undefined});\n",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "{\"kind\":\"string\",\"value\":\"Banana\"}"
+      }
+    ]
+  },
+  {
+    "name": "locator.isEnabled",
+    "code": "// Reproduction example; connect browser/tab to the fixture first.\n// AX element numbers are from the recorded run: refresh before reuse.\nconst locator = tab.playwright.getByRole(\"button\", { name: \"Disabled\", exact: true });\nconst result = await locator.isEnabled();\nnodeRepl.write({kind: result === undefined ? \"undefined\" : typeof result, value: result === null || [\"string\",\"boolean\",\"number\"].includes(typeof result) ? result : undefined, length: Array.isArray(result) || result instanceof Uint8Array ? result.length : undefined});\n",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "{\"kind\":\"boolean\",\"value\":false}"
+      }
+    ]
+  },
+  {
+    "name": "locator.isVisible",
+    "code": "// Reproduction example; connect browser/tab to the fixture first.\n// AX element numbers are from the recorded run: refresh before reuse.\nconst locator = tab.playwright.locator(\"button\").filter({ hasText: \"Hidden\" });\nconst result = await locator.isVisible();\nnodeRepl.write({kind: result === undefined ? \"undefined\" : typeof result, value: result === null || [\"string\",\"boolean\",\"number\"].includes(typeof result) ? result : undefined, length: Array.isArray(result) || result instanceof Uint8Array ? result.length : undefined});\n",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "{\"kind\":\"boolean\",\"value\":false}"
+      }
+    ]
+  },
+  {
+    "name": "locator.last",
+    "code": "// Reproduction example; connect browser/tab to the fixture first.\n// AX element numbers are from the recorded run: refresh before reuse.\nconst locator = tab.playwright.locator(\".item\");\nconst result = await locator.last();\nnodeRepl.write({kind: result === undefined ? \"undefined\" : typeof result, value: result === null || [\"string\",\"boolean\",\"number\"].includes(typeof result) ? result : undefined, length: Array.isArray(result) || result instanceof Uint8Array ? result.length : undefined});\n",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "{\"kind\":\"object\"}"
+      }
+    ]
+  },
+  {
+    "name": "locator.locator",
+    "code": "// Reproduction example; connect browser/tab to the fixture first.\n// AX element numbers are from the recorded run: refresh before reuse.\nconst locator = tab.playwright.locator(\"section\").first();\nconst result = locator.locator(\"#name\");\nnodeRepl.write({kind: result === undefined ? \"undefined\" : typeof result, value: result === null || [\"string\",\"boolean\",\"number\"].includes(typeof result) ? result : undefined, length: Array.isArray(result) || result instanceof Uint8Array ? result.length : undefined});\n",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "{\"kind\":\"object\"}"
+      }
+    ]
+  },
+  {
+    "name": "locator.nth",
+    "code": "// Reproduction example; connect browser/tab to the fixture first.\n// AX element numbers are from the recorded run: refresh before reuse.\nconst locator = tab.playwright.locator(\".item\");\nconst result = locator.nth(1);\nnodeRepl.write({kind: result === undefined ? \"undefined\" : typeof result, value: result === null || [\"string\",\"boolean\",\"number\"].includes(typeof result) ? result : undefined, length: Array.isArray(result) || result instanceof Uint8Array ? result.length : undefined});\n",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "{\"kind\":\"object\"}"
+      }
+    ]
+  },
+  {
+    "name": "locator.or",
+    "code": "// Reproduction example; connect browser/tab to the fixture first.\n// AX element numbers are from the recorded run: refresh before reuse.\nconst locator = tab.playwright.locator(\".item\");\nconst result = locator.or(tab.playwright.getByText(\"Banana\", { exact: true }));\nnodeRepl.write({kind: result === undefined ? \"undefined\" : typeof result, value: result === null || [\"string\",\"boolean\",\"number\"].includes(typeof result) ? result : undefined, length: Array.isArray(result) || result instanceof Uint8Array ? result.length : undefined});\n",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "{\"kind\":\"object\"}"
+      }
+    ]
+  },
+  {
+    "name": "locator.press",
+    "code": "// Reproduction example; connect browser/tab to the fixture first.\n// AX element numbers are from the recorded run: refresh before reuse.\nconst locator = tab.playwright.getByRole(\"textbox\", { name: \"Name\", exact: true });\nconst result = await locator.press(\"End\");\nnodeRepl.write({kind: result === undefined ? \"undefined\" : typeof result, value: result === null || [\"string\",\"boolean\",\"number\"].includes(typeof result) ? result : undefined, length: Array.isArray(result) || result instanceof Uint8Array ? result.length : undefined});\n",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "{\"kind\":\"undefined\"}"
+      }
+    ]
+  },
+  {
+    "name": "locator.pressSequentially",
+    "code": "// Reproduction example; connect browser/tab to the fixture first.\n// AX element numbers are from the recorded run: refresh before reuse.\nconst locator = tab.playwright.getByRole(\"textbox\", { name: \"Name\", exact: true });\nconst result = await locator.pressSequentially(\"123\");\nnodeRepl.write({kind: result === undefined ? \"undefined\" : typeof result, value: result === null || [\"string\",\"boolean\",\"number\"].includes(typeof result) ? result : undefined, length: Array.isArray(result) || result instanceof Uint8Array ? result.length : undefined});\n",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "{\"kind\":\"undefined\"}"
+      }
+    ]
+  },
+  {
+    "name": "locator.selectOption",
+    "code": "// Reproduction example; connect browser/tab to the fixture first.\n// AX element numbers are from the recorded run: refresh before reuse.\nconst locator = tab.playwright.getByLabel(\"Choice\");\nconst result = await locator.selectOption(\"b\");\nnodeRepl.write({kind: result === undefined ? \"undefined\" : typeof result, value: result === null || [\"string\",\"boolean\",\"number\"].includes(typeof result) ? result : undefined, length: Array.isArray(result) || result instanceof Uint8Array ? result.length : undefined});\n",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "{\"kind\":\"undefined\"}"
+      }
+    ]
+  },
+  {
+    "name": "locator.setChecked",
+    "code": "// Reproduction example; connect browser/tab to the fixture first.\n// AX element numbers are from the recorded run: refresh before reuse.\nconst locator = tab.playwright.getByRole(\"checkbox\", { name: \"Agree\" });\nconst result = await locator.setChecked(true);\nnodeRepl.write({kind: result === undefined ? \"undefined\" : typeof result, value: result === null || [\"string\",\"boolean\",\"number\"].includes(typeof result) ? result : undefined, length: Array.isArray(result) || result instanceof Uint8Array ? result.length : undefined});\n",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "{\"kind\":\"undefined\"}"
+      }
+    ]
+  },
+  {
+    "name": "locator.textContent",
+    "code": "// Reproduction example; connect browser/tab to the fixture first.\n// AX element numbers are from the recorded run: refresh before reuse.\nconst locator = tab.playwright.locator(\".item\").first();\nconst result = await locator.textContent();\nnodeRepl.write({kind: result === undefined ? \"undefined\" : typeof result, value: result === null || [\"string\",\"boolean\",\"number\"].includes(typeof result) ? result : undefined, length: Array.isArray(result) || result instanceof Uint8Array ? result.length : undefined});\n",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "{\"kind\":\"string\",\"value\":\"Apple\"}"
+      }
+    ]
+  },
+  {
+    "name": "locator.type",
+    "code": "// Reproduction example; connect browser/tab to the fixture first.\n// AX element numbers are from the recorded run: refresh before reuse.\nconst locator = tab.playwright.getByRole(\"textbox\", { name: \"Name\", exact: true });\nconst result = await locator.type(\" plus\");\nnodeRepl.write({kind: result === undefined ? \"undefined\" : typeof result, value: result === null || [\"string\",\"boolean\",\"number\"].includes(typeof result) ? result : undefined, length: Array.isArray(result) || result instanceof Uint8Array ? result.length : undefined});\n",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "{\"kind\":\"undefined\"}"
+      }
+    ]
+  },
+  {
+    "name": "locator.uncheck",
+    "code": "// Reproduction example; connect browser/tab to the fixture first.\n// AX element numbers are from the recorded run: refresh before reuse.\nconst locator = tab.playwright.getByRole(\"checkbox\", { name: \"Agree\" });\nconst result = await locator.uncheck();\nnodeRepl.write({kind: result === undefined ? \"undefined\" : typeof result, value: result === null || [\"string\",\"boolean\",\"number\"].includes(typeof result) ? result : undefined, length: Array.isArray(result) || result instanceof Uint8Array ? result.length : undefined});\n",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "{\"kind\":\"undefined\"}"
+      }
+    ]
+  },
+  {
+    "name": "locator.waitFor",
+    "code": "// Reproduction example; connect browser/tab to the fixture first.\n// AX element numbers are from the recorded run: refresh before reuse.\nconst locator = tab.playwright.getByRole(\"textbox\", { name: \"Name\", exact: true });\nconst result = await locator.waitFor({ state: \"visible\", timeoutMs: 2000 });\nnodeRepl.write({kind: result === undefined ? \"undefined\" : typeof result, value: result === null || [\"string\",\"boolean\",\"number\"].includes(typeof result) ? result : undefined, length: Array.isArray(result) || result instanceof Uint8Array ? result.length : undefined});\n",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "{\"kind\":\"undefined\"}"
+      }
+    ]
+  },
+  {
+    "name": "tab.clipboard.read",
+    "code": "// Reproduction example; connect browser/tab to the fixture first.\n// AX element numbers are from the recorded run: refresh before reuse.\nconst result = await tab.clipboard.read();\nnodeRepl.write({kind: result === undefined ? \"undefined\" : typeof result, value: result === null || [\"string\",\"boolean\",\"number\"].includes(typeof result) ? result : undefined, length: Array.isArray(result) || result instanceof Uint8Array ? result.length : undefined});\n",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "{\"kind\":\"object\",\"length\":0}"
+      }
+    ]
+  },
+  {
+    "name": "tab.clipboard.readText",
+    "code": "// Reproduction example; connect browser/tab to the fixture first.\n// AX element numbers are from the recorded run: refresh before reuse.\nconst result = await tab.clipboard.readText();\nnodeRepl.write({kind: result === undefined ? \"undefined\" : typeof result, value: result === null || [\"string\",\"boolean\",\"number\"].includes(typeof result) ? result : undefined, length: Array.isArray(result) || result instanceof Uint8Array ? result.length : undefined});\n",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "{\"kind\":\"string\",\"value\":\"\"}"
+      }
+    ]
+  },
+  {
+    "name": "tab.clipboard.write",
+    "code": "// Reproduction example; connect browser/tab to the fixture first.\n// AX element numbers are from the recorded run: refresh before reuse.\nconst result = await tab.clipboard.write([{ entries: [{ mimeType: \"text/plain\", text: \"browser audit structured clipboard\" }] }]);\nnodeRepl.write({kind: result === undefined ? \"undefined\" : typeof result, value: result === null || [\"string\",\"boolean\",\"number\"].includes(typeof result) ? result : undefined, length: Array.isArray(result) || result instanceof Uint8Array ? result.length : undefined});\n",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "{\"kind\":\"undefined\"}"
+      }
+    ]
+  },
+  {
+    "name": "tab.clipboard.writeText",
+    "code": "// Reproduction example; connect browser/tab to the fixture first.\n// AX element numbers are from the recorded run: refresh before reuse.\nconst result = await tab.clipboard.writeText(\"browser audit clipboard\");\nnodeRepl.write({kind: result === undefined ? \"undefined\" : typeof result, value: result === null || [\"string\",\"boolean\",\"number\"].includes(typeof result) ? result : undefined, length: Array.isArray(result) || result instanceof Uint8Array ? result.length : undefined});\n",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "{\"kind\":\"undefined\"}"
+      }
+    ]
+  },
+  {
+    "name": "tab.dev.logs",
+    "code": "// Reproduction example; connect browser/tab to the fixture first.\n// AX element numbers are from the recorded run: refresh before reuse.\nconst result = await tab.dev.logs({ limit: 20 });\nnodeRepl.write({kind: result === undefined ? \"undefined\" : typeof result, value: result === null || [\"string\",\"boolean\",\"number\"].includes(typeof result) ? result : undefined, length: Array.isArray(result) || result instanceof Uint8Array ? result.length : undefined});\n",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "{\"kind\":\"object\",\"length\":1}"
+      }
+    ]
+  },
+  {
+    "name": "tab.getAXState",
+    "code": "// Reproduction example; connect browser/tab to the fixture first.\n// AX element numbers are from the recorded run: refresh before reuse.\nconst result = await tab.getAXState({ disableDiffing: true, emit: false });\nnodeRepl.write({kind: result === undefined ? \"undefined\" : typeof result, value: result === null || [\"string\",\"boolean\",\"number\"].includes(typeof result) ? result : undefined, length: Array.isArray(result) || result instanceof Uint8Array ? result.length : undefined});\n",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "{\"kind\":\"string\",\"value\":\"Browser tab: 16092797, Title: \\\"Browser Tool Audit\\\", URL: \\\"http://127.0.0.1:29653/\\\".\\n0 AXWebArea Browser Tool Audit, URL: 127.0.0.1:29653/\\n\\t1 heading Browser Tool Audit, Value: 1\\n\\t\\t2 text Browser Tool Audit\\n\\t3 text 로컬 테스트 페이지 · 계정/결제 없음\\n\\t4 container\\n\\t\\t5 text Name\\n\\t\\t6 text field (settable) Description: Name, Value: audit fill123 plus, ID: name\\n\\t\\t7 text Notes\\n\\t\\t8 text entry area (settable) Description: Notes, Value: initial notes\\n\\t\\t9 checkbox (settable, integer) Description: Agree, Value: 0\\n\\t\\t10 text Agree\\n\\t\\t11 pop up button (collapsed, settable) Description: Choice, Value: Beta, Secondary Actions: Expand\\n\\t\\t\\t12 menu\\n\\t\\t\\t\\t13 Alpha\\n\\t\\t\\t\\t14 (selected) Beta\\n\\t\\t15 button Increment, ID: increment\\n\\t\\t16 text 3\\n\\t\\t17 button (disabled) Disabled\\n\\t\\t18 button Next page, ID: nav\\n\\t19 container\\n\\t\\t20 content list items\\n\\t\\t\\t21 container\\n\\t\\t\\t\\t22 AXListMarker • \\n\\t\\t\\t\\t23 text Apple\\n\\t\\t\\t24 container\\n\\t\\t\\t\\t25 AXListMarker • \\n\\t\\t\\t\\t26 text Banana\\n\\t\\t\\t27 container\\n\\t\\t\\t\\t28 AXListMarker • \\n\\t\\t\\t\\t29 text Carrot\\n\\t\\t30 button (collapsed) Details, Secondary Actions: Expand\\n\\t\\t\\t31 text Details\\n\\t32 container\\n\\t\\t33 button Alert\\n\\t\\t34 button Confirm\\n\\t\\t35 button Prompt\\n\\t\\t36 button Arm beforeunload\\n\\t\\t37 text none\\n\\t38 container\\n\\t\\t39 button Upload single\\n\\t\\t40 button Upload multiple\\n\\t\\t41 text none\\n\\t\\t42 link Description: Download sample, Value: 127.0.0.1:29653/sample.txt, ID: download\\n\\t\\t43 link Description: Download image, Value: 127.0.0.1:29653/pixel.png, ID: image-download\\n\\t\\t44 image Audit pixel\\n\\t45 container\\n\\t\\t46 text Drag me\\n\\t\\t47 text Drop here\\n\\t\\t48 text none\\n\\t\\t49 container Audit frame\\n\\t\\t\\t50 AXWebArea Audit frame, URL: 127.0.0.1:29653/frame.html\\n\\t\\t\\t\\t51 button Frame button\\n\\t\\t\\t\\t52 container\\n\\t\\t\\t\\t\\t53 text Frame name\\n\\t\\t\\t\\t\\t54 text field (settable) Frame name\\n\\t\\t\\t\\t55 text Frame text\\n\\t\\t\\t\\t56 container Nested frame\\n\\t\\t\\t\\t\\t57 AXWebArea 127.0.0.1:29653/nested.html\\n\\t\\t\\t\\t\\t\\t58 text Nested text\\n\\t59 button Bottom button, ID: bottom\\n\\nThe focused UI element is 9 checkbox (settable, integer) Description: Agree, Value: 0\"}"
+      }
+    ]
+  },
+  {
+    "name": "tab.getScreenshot",
+    "code": "// Reproduction example; connect browser/tab to the fixture first.\n// AX element numbers are from the recorded run: refresh before reuse.\nconst result = await tab.getScreenshot({ emit: false });\nnodeRepl.write({kind: result === undefined ? \"undefined\" : typeof result, value: result === null || [\"string\",\"boolean\",\"number\"].includes(typeof result) ? result : undefined, length: Array.isArray(result) || result instanceof Uint8Array ? result.length : undefined});\n",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "{\"kind\":\"object\",\"length\":44202}"
+      }
+    ]
+  },
+  {
+    "name": "tab.getAXStateAndScreenshot",
+    "code": "// Reproduction example; connect browser/tab to the fixture first.\n// AX element numbers are from the recorded run: refresh before reuse.\nconst result = await tab.getAXStateAndScreenshot({ emit: false });\nnodeRepl.write({kind: result === undefined ? \"undefined\" : typeof result, value: result === null || [\"string\",\"boolean\",\"number\"].includes(typeof result) ? result : undefined, length: Array.isArray(result) || result instanceof Uint8Array ? result.length : undefined});\n",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "{\"kind\":\"object\"}"
+      }
+    ]
+  },
+  {
+    "name": "browser.capabilities.list",
+    "code": "// Reproduction example; connect browser/tab to the fixture first.\n// AX element numbers are from the recorded run: refresh before reuse.\nconst result = await browser.capabilities.list();\nnodeRepl.write({kind: result === undefined ? \"undefined\" : typeof result, value: result === null || [\"string\",\"boolean\",\"number\"].includes(typeof result) ? result : undefined, length: Array.isArray(result) || result instanceof Uint8Array ? result.length : undefined});\n",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "{\"kind\":\"object\",\"length\":2}"
+      }
+    ]
+  },
+  {
+    "name": "browser.capabilities.get",
+    "code": "// Reproduction example; connect browser/tab to the fixture first.\n// AX element numbers are from the recorded run: refresh before reuse.\nconst result = await browser.capabilities.get(\"viewport\");\nnodeRepl.write({kind: result === undefined ? \"undefined\" : typeof result, value: result === null || [\"string\",\"boolean\",\"number\"].includes(typeof result) ? result : undefined, length: Array.isArray(result) || result instanceof Uint8Array ? result.length : undefined});\n",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "{\"kind\":\"object\"}"
+      }
+    ]
+  },
+  {
+    "name": "tab.capabilities.list",
+    "code": "// Reproduction example; connect browser/tab to the fixture first.\n// AX element numbers are from the recorded run: refresh before reuse.\nconst result = await tab.capabilities.list();\nnodeRepl.write({kind: result === undefined ? \"undefined\" : typeof result, value: result === null || [\"string\",\"boolean\",\"number\"].includes(typeof result) ? result : undefined, length: Array.isArray(result) || result instanceof Uint8Array ? result.length : undefined});\n",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "{\"kind\":\"object\",\"length\":2}"
+      }
+    ]
+  },
+  {
+    "name": "tab.capabilities.get",
+    "code": "// Reproduction example; connect browser/tab to the fixture first.\n// AX element numbers are from the recorded run: refresh before reuse.\nconst result = await tab.capabilities.get(\"pageAssets\");\nnodeRepl.write({kind: result === undefined ? \"undefined\" : typeof result, value: result === null || [\"string\",\"boolean\",\"number\"].includes(typeof result) ? result : undefined, length: Array.isArray(result) || result instanceof Uint8Array ? result.length : undefined});\n",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "{\"kind\":\"object\"}"
+      }
+    ]
+  },
+  {
+    "name": "viewport.documentation",
+    "code": "// Reproduction example; connect browser/tab to the fixture first.\n// AX element numbers are from the recorded run: refresh before reuse.\nconst viewport = await browser.capabilities.get(\"viewport\");\nconst result = await viewport.documentation();\nnodeRepl.write({kind: result === undefined ? \"undefined\" : typeof result, value: result === null || [\"string\",\"boolean\",\"number\"].includes(typeof result) ? result : undefined, length: Array.isArray(result) || result instanceof Uint8Array ? result.length : undefined});\n",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "{\"kind\":\"string\",\"value\":\"# Browser Capability: viewport\\nBrowser viewport override control. Do not set the viewport during normal browser setup; most tasks should use the existing/default viewport. Use `set()` only when the user asks for specific dimensions, asks to test a responsive breakpoint or device size, or the task cannot be answered correctly without a specific viewport. Do not resize the browser just to make a screenshot larger, prettier, or fit more content. Use the default viewport, a normal screenshot, or a full-page screenshot instead. If you set a temporary viewport, call `reset()` before finishing unless the user asked to keep that viewport.\\n\\n```ts\\nconst capability = await browser.capabilities.get(\\\"viewport\\\");\\n\\ninterface ViewportSize {\\n  height: number;\\n  width: number;\\n}\\n\\ninterface ViewportBrowserCapability {\\n  reset(): Promise<void>; // Clear the explicit viewport override and return to default browser sizing.\\n  set(options: ViewportSize): Promise<void>; // Apply an explicit browser viewport override.\\n}\\n```\\n\"}"
+      }
+    ]
+  },
+  {
+    "name": "viewport.set",
+    "code": "// Reproduction example; connect browser/tab to the fixture first.\n// AX element numbers are from the recorded run: refresh before reuse.\nconst viewport = await browser.capabilities.get(\"viewport\");\nconst result = await viewport.set({ width: 900, height: 700 });\nnodeRepl.write({kind: result === undefined ? \"undefined\" : typeof result, value: result === null || [\"string\",\"boolean\",\"number\"].includes(typeof result) ? result : undefined, length: Array.isArray(result) || result instanceof Uint8Array ? result.length : undefined});\n",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "{\"kind\":\"undefined\"}"
+      }
+    ]
+  },
+  {
+    "name": "viewport.reset",
+    "code": "// Reproduction example; connect browser/tab to the fixture first.\n// AX element numbers are from the recorded run: refresh before reuse.\nconst viewport = await browser.capabilities.get(\"viewport\");\nconst result = await viewport.reset();\nnodeRepl.write({kind: result === undefined ? \"undefined\" : typeof result, value: result === null || [\"string\",\"boolean\",\"number\"].includes(typeof result) ? result : undefined, length: Array.isArray(result) || result instanceof Uint8Array ? result.length : undefined});\n",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "{\"kind\":\"undefined\"}"
+      }
+    ]
+  },
+  {
+    "name": "visibility.documentation",
+    "code": "// Reproduction example; connect browser/tab to the fixture first.\n// AX element numbers are from the recorded run: refresh before reuse.\nconst visibility = await browser.capabilities.get(\"visibility\");\nconst result = await visibility.documentation();\nnodeRepl.write({kind: result === undefined ? \"undefined\" : typeof result, value: result === null || [\"string\",\"boolean\",\"number\"].includes(typeof result) ? result : undefined, length: Array.isArray(result) || result instanceof Uint8Array ? result.length : undefined});\n",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "{\"kind\":\"string\",\"value\":\"# Browser Capability: visibility\\nBrowser visibility control. Use `set(true)` to present the browser visually to the user, `set(false)` to hide it, and `get()` to check whether it is currently visible. Keep browser work in the background unless the user asks to see it or live viewing is useful. When the browser should be visible, call `set(true)`. When taking screenshots to verify browser behavior, include them in progress updates when possible and include the relevant screenshots inline in the final response with Markdown image syntax unless the user asks for text only.\\n\\n```ts\\nconst capability = await browser.capabilities.get(\\\"visibility\\\");\\n\\ninterface VisibilityBrowserCapability {\\n  get(): Promise<boolean>; // Read whether the browser is visually presented to the user.\\n  set(visible: boolean): Promise<void>; // Set whether the browser is visually presented to the user.\\n}\\n```\\n\"}"
+      }
+    ]
+  },
+  {
+    "name": "visibility.get",
+    "code": "// Reproduction example; connect browser/tab to the fixture first.\n// AX element numbers are from the recorded run: refresh before reuse.\nconst visibility = await browser.capabilities.get(\"visibility\");\nconst result = await visibility.get();\nnodeRepl.write({kind: result === undefined ? \"undefined\" : typeof result, value: result === null || [\"string\",\"boolean\",\"number\"].includes(typeof result) ? result : undefined, length: Array.isArray(result) || result instanceof Uint8Array ? result.length : undefined});\n",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "{\"kind\":\"boolean\",\"value\":true}"
+      }
+    ]
+  },
+  {
+    "name": "visibility.set",
+    "code": "// Reproduction example; connect browser/tab to the fixture first.\n// AX element numbers are from the recorded run: refresh before reuse.\nconst visibility = await browser.capabilities.get(\"visibility\");\nconst result = await visibility.set(true);\nnodeRepl.write({kind: result === undefined ? \"undefined\" : typeof result, value: result === null || [\"string\",\"boolean\",\"number\"].includes(typeof result) ? result : undefined, length: Array.isArray(result) || result instanceof Uint8Array ? result.length : undefined});\n",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "{\"kind\":\"undefined\"}"
+      }
+    ]
+  },
+  {
+    "name": "pageAssets.documentation",
+    "code": "// Reproduction example; connect browser/tab to the fixture first.\n// AX element numbers are from the recorded run: refresh before reuse.\nconst pageAssets = await tab.capabilities.get(\"pageAssets\");\nconst result = await pageAssets.documentation();\nnodeRepl.write({kind: result === undefined ? \"undefined\" : typeof result, value: result === null || [\"string\",\"boolean\",\"number\"].includes(typeof result) ? result : undefined, length: Array.isArray(result) || result instanceof Uint8Array ? result.length : undefined});\n",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "{\"kind\":\"string\",\"value\":\"# Tab Capability: pageAssets\\nAsset inventory and bundling for the current rendered page state. Use `list()` to inspect assets already observed in the tab's current state. If lazy-loaded content or another UI state matters, load that state first, then call `list()` again so the inventory reflects what is currently observable. Use `bundle()` to export discovered file assets into a temporary local artifact directory. Prefer `kinds` for broad acquisition and `assetIds` for narrow follow-up. Do not navigate directly to asset URLs just to fetch them.\\n\\n```ts\\nconst capability = await tab.capabilities.get(\\\"pageAssets\\\");\\n\\ninterface PageAssetsTabCapability {\\n  bundle(options: { assetIds?: Array<string>; inventoryId: string; kinds?: Array<\\\"font\\\" | \\\"image\\\" | \\\"stylesheet\\\" | \\\"video\\\"> }): Promise<{ assets: Array<{ contentType: null | string; id: string; kind: \\\"font\\\" | \\\"image\\\" | \\\"stylesheet\\\" | \\\"video\\\"; name: string; path: string; url: string }>; directoryPath: string; failures: Array<{ contentType: null | string; id: string; name: string; reason: string; url: string }>; manifestPath: string; summary: { downloadedCount: number; elapsedMs: number; failedCount: number; requestedCount: number } }>; // Export file assets from a prior inventory into a local artifact directory.\\n  list(): Promise<{ assets: Array<{ id: string; kind: \\\"script\\\" | \\\"other\\\" | \\\"font\\\" | \\\"image\\\" | \\\"stylesheet\\\" | \\\"video\\\"; name: string; sources: Array<{ kind: \\\"attribute\\\" | \\\"computedStyle\\\" | \\\"resource\\\"; nodeId?: number; property?: string }>; url: string }>; id: string; inlineSvgs: Array<{ id: string; markup: string; name: string }>; pageUrl: null | string; summary: { byKind: Partial<Record<\\\"script\\\" | \\\"other\\\" | \\\"font\\\" | \\\"image\\\" | \\\"stylesheet\\\" | \\\"video\\\", number>>; inlineSvgCount: number; totalCount: number } }>; // Inventory file assets and inline SVGs observed in the current page state.\\n}\\n```\\n\"}"
+      }
+    ]
+  },
+  {
+    "name": "pageAssets.list",
+    "code": "// Reproduction example; connect browser/tab to the fixture first.\n// AX element numbers are from the recorded run: refresh before reuse.\nconst pageAssets = await tab.capabilities.get(\"pageAssets\");\nconst result = await pageAssets.list();\nnodeRepl.write({kind: result === undefined ? \"undefined\" : typeof result, value: result === null || [\"string\",\"boolean\",\"number\"].includes(typeof result) ? result : undefined, length: Array.isArray(result) || result instanceof Uint8Array ? result.length : undefined});\n",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "{\"kind\":\"object\"}"
+      }
+    ]
+  },
+  {
+    "name": "pageAssets.bundle",
+    "code": "// Reproduction example; connect browser/tab to the fixture first.\n// AX element numbers are from the recorded run: refresh before reuse.\nconst pageAssets = await tab.capabilities.get(\"pageAssets\");\nconst inventory = await pageAssets.list();\nconst result = await pageAssets.bundle({ inventoryId: inventory.id, kinds: [\"image\"] });\nnodeRepl.write({kind: result === undefined ? \"undefined\" : typeof result, value: result === null || [\"string\",\"boolean\",\"number\"].includes(typeof result) ? result : undefined, length: Array.isArray(result) || result instanceof Uint8Array ? result.length : undefined});\n",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "{\"kind\":\"object\"}"
+      }
+    ]
+  },
+  {
+    "name": "webmcp.documentation",
+    "code": "// Reproduction example; connect browser/tab to the fixture first.\n// AX element numbers are from the recorded run: refresh before reuse.\nconst webmcp = await tab.capabilities.get(\"webmcp\");\nconst result = await webmcp.documentation();\nnodeRepl.write({kind: result === undefined ? \"undefined\" : typeof result, value: result === null || [\"string\",\"boolean\",\"number\"].includes(typeof result) ? result : undefined, length: Array.isArray(result) || result instanceof Uint8Array ? result.length : undefined});\n",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "{\"kind\":\"string\",\"value\":\"# Tab Capability: webmcp\\nFetches document-bound WebMCP tools for a single tab.\\n\\n```ts\\nconst capability = await tab.capabilities.get(\\\"webmcp\\\");\\n\\ninterface TabWebMcpCapability {\\n  fetchTools(): Promise<WebMcpTools>; // Fetch tools registered in the tab's current document. The returned object remains bound to those exact registrations.\\n}\\n```\\n\"}"
+      }
+    ]
+  },
+  {
+    "name": "webmcp.fetchTools",
+    "code": "// Reproduction example; connect browser/tab to the fixture first.\n// AX element numbers are from the recorded run: refresh before reuse.\nconst webmcp = await tab.capabilities.get(\"webmcp\");\nconst result = await webmcp.fetchTools();\nnodeRepl.write({kind: result === undefined ? \"undefined\" : typeof result, value: result === null || [\"string\",\"boolean\",\"number\"].includes(typeof result) ? result : undefined, length: Array.isArray(result) || result instanceof Uint8Array ? result.length : undefined});\n",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "{\"kind\":\"object\"}"
+      }
+    ]
+  },
+  {
+    "name": "webmcp.tools.description",
+    "code": "// Reproduction example; connect browser/tab to the fixture first.\n// AX element numbers are from the recorded run: refresh before reuse.\nconst webmcp = await tab.capabilities.get(\"webmcp\");\nconst webmcpTools = await webmcp.fetchTools();\nconst result = webmcpTools.description();\nnodeRepl.write({kind: result === undefined ? \"undefined\" : typeof result, value: result === null || [\"string\",\"boolean\",\"number\"].includes(typeof result) ? result : undefined, length: Array.isArray(result) || result instanceof Uint8Array ? result.length : undefined});\n",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "{\"kind\":\"string\",\"value\":\"WebMCP tools available in this document:\\n[\\n  {\\n    \\\"name\\\": \\\"audit_echo__37458e08-043b-4265-a068-18f20d55c3a1\\\",\\n    \\\"title\\\": \\\"\\\",\\n    \\\"description\\\": \\\"Echo a test string without external effects\\\",\\n    \\\"inputSchema\\\": {\\n      \\\"properties\\\": {\\n        \\\"text\\\": {\\n          \\\"type\\\": \\\"string\\\"\\n        }\\n      },\\n      \\\"required\\\": [\\n        \\\"text\\\"\\n      ],\\n      \\\"type\\\": \\\"object\\\"\\n    },\\n    \\\"origin\\\": \\\"http://127.0.0.1:29653\\\",\\n    \\\"pageUrl\\\": \\\"http://127.0.0.1:29653/\\\"\\n  }\\n]\\nCall tools.call(name, input) to invoke one.\"}"
+      }
+    ]
+  },
+  {
+    "name": "tab.playwright.waitForTimeout",
+    "code": "await tab.playwright.waitForTimeout(1);",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "undefined"
+      }
+    ]
+  },
+  {
+    "name": "tab.playwright.waitForLoadState",
+    "code": "await tab.playwright.waitForLoadState({state:\"load\",timeoutMs:1000});",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "undefined"
+      }
+    ]
+  },
+  {
+    "name": "tab.playwright.waitForURL",
+    "code": "await tab.playwright.waitForURL(\"http://127.0.0.1:29653/\",{timeoutMs:1000});",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "undefined"
+      }
+    ]
+  },
+  {
+    "name": "AX actions",
+    "code": "const state=await tab.getAXState({emit:false,disableDiffing:true}); const nameIndex=Number(state.match(/(\\d+) text field[^\\n]*Description: Name,/)[1]); await tab.setValue(nameIndex,\"AX value\"); await tab.getAXState({emit:false}); await tab.typeText(nameIndex,\" typed\"); await tab.pressKey(nameIndex,\"End\"); await tab.getAXState({emit:false});",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "Browser tab: 16092797, Title: \"Browser Tool Audit\", URL: \"http://127.0.0.1:29653/\".\nThe following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.\n~\t\t6 text field (settable) Description: Name, Value: AX value typed, ID: name\nThe focused UI element is 6 text field (settable) Description: Name, Value: AX value typed, ID: name"
+      }
+    ]
+  },
+  {
+    "name": "file chooser",
+    "code": "const chooserPromise=tab.playwright.waitForEvent(\"filechooser\",{timeoutMs:3000}); await tab.playwright.getByRole(\"button\",{name:\"Upload single\",exact:true}).click(); const chooser=await chooserPromise; nodeRepl.write(chooser.isMultiple()); await chooser.setFiles([\"/Users/kihoon/Documents/Codex/2026-10-01-mcp/browser-agent-bridge/tests/fixture/sample.txt\"]);",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "false"
+      }
+    ]
+  },
+  {
+    "name": "download",
+    "code": "const downloadPromise=tab.playwright.waitForEvent(\"download\",{timeoutMs:4000}); await tab.playwright.getByRole(\"link\",{name:\"Download sample\",exact:true}).click(); const download=await downloadPromise; nodeRepl.write(await download.path());",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "/var/folders/gb/js_43wns2yvb50bbf33l04y00000gn/T/playwright-artifacts-PFc4xq/1bf53585-6ae7-405b-a4ac-d086f1c8f777"
+      }
+    ]
+  },
+  {
+    "name": "confirm dialog",
+    "code": "await tab.playwright.getByRole(\"button\",{name:\"Confirm\",exact:true}).click(); await tab.playwright.waitForTimeout(600); const confirmDialog=await tab.getJsDialog(); nodeRepl.write(confirmDialog?.type); await confirmDialog.accept();",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "confirm"
+      }
+    ]
+  },
+  {
+    "name": "prompt dialog",
+    "code": "await tab.playwright.getByRole(\"button\",{name:\"Prompt\",exact:true}).click(); await tab.playwright.waitForTimeout(600); const promptDialog=await tab.getJsDialog(); await promptDialog.accept(\"Bridge prompt\");",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "undefined"
+      }
+    ]
+  },
+  {
+    "name": "alert dialog",
+    "code": "await tab.playwright.getByRole(\"button\",{name:\"Alert\",exact:true}).click(); await tab.playwright.waitForTimeout(600); const alertDialog=await tab.getJsDialog(); await alertDialog.dismiss();",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "undefined"
+      }
+    ]
+  },
+  {
+    "name": "navigation",
+    "code": "await tab.playwright.expectNavigation(()=>tab.playwright.getByRole(\"button\",{name:\"Next page\",exact:true}).click(),{url:\"http://127.0.0.1:29653/next.html\",timeoutMs:2500}); await tab.back(); await tab.forward(); await tab.reload(); await tab.back();",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "undefined"
+      }
+    ]
+  },
+  {
+    "name": "mark lifecycle",
+    "code": "await tab.markHandoff(); await tab.markDeliverable();",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "undefined"
+      }
+    ]
+  },
+  {
+    "name": "screenshot artifact",
+    "code": "await nodeRepl.emitImage(await tab.screenshot({fullPage:false}));",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "image",
+        "mimeType": "image/png",
+        "bytes": 39597
+      }
+    ]
+  },
+  {
+    "name": "cleanup",
+    "code": "await tab.close();",
+    "status": "SUCCESS",
+    "output": [
+      {
+        "type": "text",
+        "text": "undefined"
+      }
+    ]
+  }
+]

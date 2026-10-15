@@ -1,0 +1,27 @@
+{
+  "manifest_version": 3,
+  "name": "Browser Agent Bridge (private research)",
+  "version": "0.1.0",
+  "description": "로컬 MCP 브릿지를 통해 브라우저 API를 실행합니다.",
+  "permissions": [
+    "debugger",
+    "tabs",
+    "history",
+    "downloads",
+    "storage",
+    "alarms"
+  ],
+  "host_permissions": [
+    "http://*/*",
+    "https://*/*"
+  ],
+  "background": {
+    "service_worker": "background.mjs",
+    "type": "module"
+  },
+  "options_page": "options.html",
+  "action": {
+    "default_title": "Browser Agent Bridge 연결 설정"
+  },
+  "minimum_chrome_version": "125"
+}

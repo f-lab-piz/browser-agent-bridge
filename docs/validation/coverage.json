@@ -1,0 +1,1075 @@
+{
+  "recordedOn": "2026-10-15",
+  "originalAppVersion": "26.928.21956",
+  "chrome": "Chrome for Testing 155.0.8059.79 mac-arm64",
+  "webmcpFlags": [
+    "--enable-features=WebMCP",
+    "--enable-blink-features=WebMCP"
+  ],
+  "scope": "카탈로그131 API. CALL_VERIFIED는 기록된 입력 호출 성공이며 전체 옵션/사이트에서의 동등성을 보증하지 않는다.",
+  "counts": {
+    "CALL_VERIFIED": 129,
+    "EXTERNAL_NO_TRANSCRIPT": 1,
+    "UNAVAILABLE_AUTO_ACCEPT": 1
+  },
+  "rows": [
+    {
+      "name": "agent.browsers.get",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#setup",
+        "extra-live-results.json#setup",
+        "external-live-results.json#setup"
+      ],
+      "note": ""
+    },
+    {
+      "name": "agent.browsers.list",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#agent.browsers.list"
+      ],
+      "note": ""
+    },
+    {
+      "name": "browser.documentation",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#browser.documentation"
+      ],
+      "note": ""
+    },
+    {
+      "name": "browser.history",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "extra-live-results.json#browser.history"
+      ],
+      "note": ""
+    },
+    {
+      "name": "browser.nameSession",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "extra-live-results.json#browser.nameSession"
+      ],
+      "note": ""
+    },
+    {
+      "name": "browser.user.claimTab",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "extra-live-results.json#browser.user.claimTab"
+      ],
+      "note": ""
+    },
+    {
+      "name": "browser.user.openTabs",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#browser.user.openTabs"
+      ],
+      "note": ""
+    },
+    {
+      "name": "browser.tabs.get",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "extra-live-results.json#browser.tabs.get"
+      ],
+      "note": ""
+    },
+    {
+      "name": "browser.tabs.list",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#browser.tabs.list"
+      ],
+      "note": ""
+    },
+    {
+      "name": "browser.tabs.new",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#setup",
+        "extra-live-results.json#setup",
+        "external-live-results.json#setup"
+      ],
+      "note": ""
+    },
+    {
+      "name": "browser.tabs.selected",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "extra-live-results.json#browser.tabs.selected"
+      ],
+      "note": ""
+    },
+    {
+      "name": "tab.back",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#navigation"
+      ],
+      "note": ""
+    },
+    {
+      "name": "tab.close",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#cleanup",
+        "extra-live-results.json#cleanup",
+        "external-live-results.json#cleanup"
+      ],
+      "note": ""
+    },
+    {
+      "name": "tab.forward",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#navigation"
+      ],
+      "note": ""
+    },
+    {
+      "name": "tab.getJsDialog",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#confirm dialog",
+        "current-live-results.json#prompt dialog",
+        "current-live-results.json#alert dialog"
+      ],
+      "note": ""
+    },
+    {
+      "name": "tab.goto",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#setup",
+        "extra-live-results.json#setup",
+        "external-live-results.json#setup"
+      ],
+      "note": ""
+    },
+    {
+      "name": "tab.markDeliverable",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#mark lifecycle"
+      ],
+      "note": "자체 브릿지에서 마크 저장. Codex 턴 종료 정책은 별도 앱 기능"
+    },
+    {
+      "name": "tab.markHandoff",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#mark lifecycle"
+      ],
+      "note": "자체 브릿지에서 마크 저장. Codex 턴 종료 정책은 별도 앱 기능"
+    },
+    {
+      "name": "tab.reload",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#navigation"
+      ],
+      "note": ""
+    },
+    {
+      "name": "tab.screenshot",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#tab.screenshot"
+      ],
+      "note": ""
+    },
+    {
+      "name": "tab.title",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#tab.title"
+      ],
+      "note": ""
+    },
+    {
+      "name": "tab.url",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#tab.url"
+      ],
+      "note": ""
+    },
+    {
+      "name": "tab.content.exportGsuite",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "external-live-results.json#tab.content.exportGsuite"
+      ],
+      "note": ""
+    },
+    {
+      "name": "tab.content.exportYouTubeTranscript",
+      "status": "EXTERNAL_NO_TRANSCRIPT",
+      "evidence": [],
+      "note": "원본 핸들러 연결, 실제 영상은 No transcript is available 오류"
+    },
+    {
+      "name": "tab.playwright.domSnapshot",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#tab.playwright.domSnapshot"
+      ],
+      "note": ""
+    },
+    {
+      "name": "tab.playwright.evaluate",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#tab.playwright.evaluate"
+      ],
+      "note": ""
+    },
+    {
+      "name": "tab.playwright.expectNavigation",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#navigation"
+      ],
+      "note": ""
+    },
+    {
+      "name": "tab.playwright.frameLocator",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#tab.playwright.frameLocator"
+      ],
+      "note": ""
+    },
+    {
+      "name": "tab.playwright.getByLabel",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#tab.playwright.getByLabel"
+      ],
+      "note": ""
+    },
+    {
+      "name": "tab.playwright.getByPlaceholder",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#tab.playwright.getByPlaceholder"
+      ],
+      "note": ""
+    },
+    {
+      "name": "tab.playwright.getByRole",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#tab.playwright.getByRole"
+      ],
+      "note": ""
+    },
+    {
+      "name": "tab.playwright.getByTestId",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#tab.playwright.getByTestId"
+      ],
+      "note": ""
+    },
+    {
+      "name": "tab.playwright.getByText",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#tab.playwright.getByText"
+      ],
+      "note": ""
+    },
+    {
+      "name": "tab.playwright.locator",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#tab.playwright.locator"
+      ],
+      "note": ""
+    },
+    {
+      "name": "tab.playwright.waitForEvent",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#file chooser",
+        "current-live-results.json#download"
+      ],
+      "note": ""
+    },
+    {
+      "name": "tab.playwright.waitForLoadState",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#tab.playwright.waitForLoadState"
+      ],
+      "note": ""
+    },
+    {
+      "name": "tab.playwright.waitForTimeout",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#tab.playwright.waitForTimeout"
+      ],
+      "note": ""
+    },
+    {
+      "name": "tab.playwright.waitForURL",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#tab.playwright.waitForURL"
+      ],
+      "note": ""
+    },
+    {
+      "name": "frame.frameLocator",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#frame.frameLocator"
+      ],
+      "note": ""
+    },
+    {
+      "name": "frame.getByLabel",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#frame.getByLabel"
+      ],
+      "note": ""
+    },
+    {
+      "name": "frame.getByPlaceholder",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#frame.getByPlaceholder"
+      ],
+      "note": ""
+    },
+    {
+      "name": "frame.getByRole",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#frame.getByRole"
+      ],
+      "note": ""
+    },
+    {
+      "name": "frame.getByTestId",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#frame.getByTestId"
+      ],
+      "note": ""
+    },
+    {
+      "name": "frame.getByText",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#frame.getByText"
+      ],
+      "note": ""
+    },
+    {
+      "name": "frame.locator",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#frame.locator"
+      ],
+      "note": ""
+    },
+    {
+      "name": "locator.all",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#locator.all"
+      ],
+      "note": ""
+    },
+    {
+      "name": "locator.allTextContents",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#locator.allTextContents"
+      ],
+      "note": ""
+    },
+    {
+      "name": "locator.and",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#locator.and"
+      ],
+      "note": ""
+    },
+    {
+      "name": "locator.check",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#locator.check"
+      ],
+      "note": ""
+    },
+    {
+      "name": "locator.click",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#locator.click"
+      ],
+      "note": ""
+    },
+    {
+      "name": "locator.count",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#locator.count"
+      ],
+      "note": ""
+    },
+    {
+      "name": "locator.dblclick",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#locator.dblclick"
+      ],
+      "note": ""
+    },
+    {
+      "name": "locator.downloadMedia",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "extra-live-results.json#locator.downloadMedia"
+      ],
+      "note": ""
+    },
+    {
+      "name": "locator.evaluate",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#locator.evaluate"
+      ],
+      "note": ""
+    },
+    {
+      "name": "locator.evaluateAll",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#locator.evaluateAll"
+      ],
+      "note": ""
+    },
+    {
+      "name": "locator.fill",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#locator.fill"
+      ],
+      "note": ""
+    },
+    {
+      "name": "locator.filter",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#locator.filter"
+      ],
+      "note": ""
+    },
+    {
+      "name": "locator.first",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#locator.first"
+      ],
+      "note": ""
+    },
+    {
+      "name": "locator.getAttribute",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#locator.getAttribute"
+      ],
+      "note": ""
+    },
+    {
+      "name": "locator.getByLabel",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#locator.getByLabel"
+      ],
+      "note": ""
+    },
+    {
+      "name": "locator.getByPlaceholder",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#locator.getByPlaceholder"
+      ],
+      "note": ""
+    },
+    {
+      "name": "locator.getByRole",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#locator.getByRole"
+      ],
+      "note": ""
+    },
+    {
+      "name": "locator.getByTestId",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#locator.getByTestId"
+      ],
+      "note": ""
+    },
+    {
+      "name": "locator.getByText",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#locator.getByText"
+      ],
+      "note": ""
+    },
+    {
+      "name": "locator.innerText",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#locator.innerText"
+      ],
+      "note": ""
+    },
+    {
+      "name": "locator.isEnabled",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#locator.isEnabled"
+      ],
+      "note": ""
+    },
+    {
+      "name": "locator.isVisible",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#locator.isVisible"
+      ],
+      "note": ""
+    },
+    {
+      "name": "locator.last",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#locator.last"
+      ],
+      "note": ""
+    },
+    {
+      "name": "locator.locator",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#locator.locator"
+      ],
+      "note": ""
+    },
+    {
+      "name": "locator.nth",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#locator.nth"
+      ],
+      "note": ""
+    },
+    {
+      "name": "locator.or",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#locator.or"
+      ],
+      "note": ""
+    },
+    {
+      "name": "locator.press",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#locator.press"
+      ],
+      "note": ""
+    },
+    {
+      "name": "locator.pressSequentially",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#locator.pressSequentially"
+      ],
+      "note": ""
+    },
+    {
+      "name": "locator.selectOption",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#locator.selectOption"
+      ],
+      "note": ""
+    },
+    {
+      "name": "locator.setChecked",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#locator.setChecked"
+      ],
+      "note": ""
+    },
+    {
+      "name": "locator.textContent",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#locator.textContent"
+      ],
+      "note": ""
+    },
+    {
+      "name": "locator.type",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#locator.type"
+      ],
+      "note": ""
+    },
+    {
+      "name": "locator.uncheck",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#locator.uncheck"
+      ],
+      "note": ""
+    },
+    {
+      "name": "locator.waitFor",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#locator.waitFor"
+      ],
+      "note": ""
+    },
+    {
+      "name": "download.path",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#download"
+      ],
+      "note": ""
+    },
+    {
+      "name": "chooser.isMultiple",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#file chooser"
+      ],
+      "note": ""
+    },
+    {
+      "name": "chooser.setFiles",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#file chooser"
+      ],
+      "note": ""
+    },
+    {
+      "name": "tab.clipboard.read",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#tab.clipboard.read"
+      ],
+      "note": ""
+    },
+    {
+      "name": "tab.clipboard.readText",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#tab.clipboard.readText"
+      ],
+      "note": ""
+    },
+    {
+      "name": "tab.clipboard.write",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#tab.clipboard.write"
+      ],
+      "note": ""
+    },
+    {
+      "name": "tab.clipboard.writeText",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#tab.clipboard.writeText"
+      ],
+      "note": ""
+    },
+    {
+      "name": "tab.dev.logs",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#tab.dev.logs"
+      ],
+      "note": ""
+    },
+    {
+      "name": "alertDialog.dismiss",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#alert dialog"
+      ],
+      "note": ""
+    },
+    {
+      "name": "beforeUnloadDialog.dismiss",
+      "status": "UNAVAILABLE_AUTO_ACCEPT",
+      "evidence": [],
+      "note": "원본 엔진이 beforeunload를 자동 승인하여 dismiss 핸들을 얻지 못함"
+    },
+    {
+      "name": "confirmDialog.accept",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#confirm dialog"
+      ],
+      "note": ""
+    },
+    {
+      "name": "confirmDialog.dismiss",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "extra-live-results.json#confirmDialog.dismiss"
+      ],
+      "note": ""
+    },
+    {
+      "name": "agent.documentation.get",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "extra-live-results.json#agent.documentation.get"
+      ],
+      "note": ""
+    },
+    {
+      "name": "promptDialog.accept",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#prompt dialog"
+      ],
+      "note": ""
+    },
+    {
+      "name": "promptDialog.dismiss",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "extra-live-results.json#promptDialog.dismiss"
+      ],
+      "note": ""
+    },
+    {
+      "name": "cua.getState",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "extra-live-results.json#cua.getState"
+      ],
+      "note": "자체 브라우저 facade. native apps/mention/deep-link는 범위 밖"
+    },
+    {
+      "name": "cua.getBrowser",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "extra-live-results.json#cua.getBrowser"
+      ],
+      "note": "자체 브라우저 facade. native apps/mention/deep-link는 범위 밖"
+    },
+    {
+      "name": "cua.listBrowsers",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "extra-live-results.json#cua.listBrowsers"
+      ],
+      "note": "자체 브라우저 facade. native apps/mention/deep-link는 범위 밖"
+    },
+    {
+      "name": "cua.createBrowserTab",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "extra-live-results.json#cua.createBrowserTab"
+      ],
+      "note": "자체 브라우저 facade. native apps/mention/deep-link는 범위 밖"
+    },
+    {
+      "name": "cua.getTab",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "extra-live-results.json#cua.getTab"
+      ],
+      "note": "자체 브라우저 facade. native apps/mention/deep-link는 범위 밖"
+    },
+    {
+      "name": "cua.listTabs",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "extra-live-results.json#cua.listTabs"
+      ],
+      "note": "자체 브라우저 facade. native apps/mention/deep-link는 범위 밖"
+    },
+    {
+      "name": "tab.getAXState",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#tab.getAXState"
+      ],
+      "note": ""
+    },
+    {
+      "name": "tab.getScreenshot",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#tab.getScreenshot"
+      ],
+      "note": ""
+    },
+    {
+      "name": "tab.getAXStateAndScreenshot",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#tab.getAXStateAndScreenshot"
+      ],
+      "note": ""
+    },
+    {
+      "name": "tab.click",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "extra-live-results.json#tab.click"
+      ],
+      "note": ""
+    },
+    {
+      "name": "tab.drag",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "extra-live-results.json#tab.drag"
+      ],
+      "note": ""
+    },
+    {
+      "name": "tab.scroll",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "extra-live-results.json#tab.scroll"
+      ],
+      "note": ""
+    },
+    {
+      "name": "tab.typeText",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#AX actions",
+        "extra-live-results.json#tab.typeText"
+      ],
+      "note": ""
+    },
+    {
+      "name": "tab.paste",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "extra-live-results.json#tab.paste"
+      ],
+      "note": ""
+    },
+    {
+      "name": "tab.pressKey",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#AX actions",
+        "extra-live-results.json#tab.pressKey"
+      ],
+      "note": ""
+    },
+    {
+      "name": "tab.setValue",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#AX actions",
+        "extra-live-results.json#tab.setValue"
+      ],
+      "note": ""
+    },
+    {
+      "name": "tab.selectText",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "extra-live-results.json#tab.selectText"
+      ],
+      "note": ""
+    },
+    {
+      "name": "tab.performSecondaryAction",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "extra-live-results.json#tab.performSecondaryAction"
+      ],
+      "note": ""
+    },
+    {
+      "name": "browser.capabilities.list",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#browser.capabilities.list"
+      ],
+      "note": ""
+    },
+    {
+      "name": "browser.capabilities.get",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#browser.capabilities.get"
+      ],
+      "note": ""
+    },
+    {
+      "name": "tab.capabilities.list",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#tab.capabilities.list"
+      ],
+      "note": ""
+    },
+    {
+      "name": "tab.capabilities.get",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#tab.capabilities.get"
+      ],
+      "note": ""
+    },
+    {
+      "name": "viewport.documentation",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#viewport.documentation"
+      ],
+      "note": ""
+    },
+    {
+      "name": "viewport.set",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#viewport.set"
+      ],
+      "note": ""
+    },
+    {
+      "name": "viewport.reset",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#viewport.reset"
+      ],
+      "note": ""
+    },
+    {
+      "name": "visibility.documentation",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#visibility.documentation"
+      ],
+      "note": "Chrome 창 최소화/복원 매핑. IAB 표시와 다름"
+    },
+    {
+      "name": "visibility.get",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#visibility.get"
+      ],
+      "note": "Chrome 창 최소화/복원 매핑. IAB 표시와 다름"
+    },
+    {
+      "name": "visibility.set",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#visibility.set"
+      ],
+      "note": "Chrome 창 최소화/복원 매핑. IAB 표시와 다름"
+    },
+    {
+      "name": "pageAssets.documentation",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#pageAssets.documentation"
+      ],
+      "note": ""
+    },
+    {
+      "name": "pageAssets.list",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#pageAssets.list"
+      ],
+      "note": ""
+    },
+    {
+      "name": "pageAssets.bundle",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#pageAssets.bundle"
+      ],
+      "note": ""
+    },
+    {
+      "name": "webmcp.documentation",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#webmcp.documentation"
+      ],
+      "note": ""
+    },
+    {
+      "name": "webmcp.fetchTools",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#webmcp.fetchTools"
+      ],
+      "note": ""
+    },
+    {
+      "name": "webmcp.tools.description",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "current-live-results.json#webmcp.tools.description"
+      ],
+      "note": ""
+    },
+    {
+      "name": "webmcp.tools.call",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "extra-live-results.json#webmcp.tools.call"
+      ],
+      "note": ""
+    },
+    {
+      "name": "mcp__cua_repl.js",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "tests/http.test.mjs (browser_js adapter)"
+      ],
+      "note": "동등 역할의 자체 MCP 툴명은 browser_js / browser_js_reset"
+    },
+    {
+      "name": "mcp__cua_repl.js_reset",
+      "status": "CALL_VERIFIED",
+      "evidence": [
+        "tests/http.test.mjs (browser_js_reset adapter)"
+      ],
+      "note": "동등 역할의 자체 MCP 툴명은 browser_js / browser_js_reset"
+    }
+  ]
+}

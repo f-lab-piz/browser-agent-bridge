@@ -1,0 +1,21 @@
+{
+  "name": "browser-agent-bridge",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.19.0"
+  },
+  "scripts": {
+    "build": "node scripts/build-sdk.mjs",
+    "test": "node --test --test-concurrency=1 tests/*.test.mjs",
+    "bridge": "node bridge/daemon.mjs",
+    "mcp": "node bridge/daemon.mjs",
+    "host": "python3 server/serve.py"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "1.32.1",
+    "ws": "8.22.0",
+    "zod": "^3.25.0"
+  }
+}

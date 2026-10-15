@@ -1,0 +1,52 @@
+
+> browser-agent-bridge@0.1.0 test
+> node --test --test-concurrency=1 tests/*.test.mjs
+
+TAP version 13
+# Subtest: HTTP 인증·탭 lease·반납·업로드 차단
+ok 1 - HTTP 인증·탭 lease·반납·업로드 차단
+  ---
+  duration_ms: 34.210125
+  type: 'test'
+  ...
+# Subtest: 확장 Native API: 탭·CDP session·history·미지원 명령 오류
+ok 2 - 확장 Native API: 탭·CDP session·history·미지원 명령 오류
+  ---
+  duration_ms: 2.620417
+  type: 'test'
+  ...
+# Subtest: HTTP MCP의 JavaScript 변수 유지와 에이전트 세션 격리
+ok 3 - HTTP MCP의 JavaScript 변수 유지와 에이전트 세션 격리
+  ---
+  duration_ms: 4765.43925
+  type: 'test'
+  ...
+# Subtest: SDK loader rejects traversal and mismatched artifact hashes
+ok 4 - SDK loader rejects traversal and mismatched artifact hashes
+  ---
+  duration_ms: 19.993792
+  type: 'test'
+  ...
+# (node:40906) ExperimentalWarning: WASI is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: 생성된 런타임이 원본 전체와 동일한 prefix를 보존
+ok 5 - 생성된 런타임이 원본 전체와 동일한 prefix를 보존
+  ---
+  duration_ms: 9.530541
+  type: 'test'
+  ...
+# Subtest: 원본 DOM/AX 정규화와 WASM은 독립 실행 가능
+ok 6 - 원본 DOM/AX 정규화와 WASM은 독립 실행 가능
+  ---
+  duration_ms: 114.210041
+  type: 'test'
+  ...
+1..6
+# tests 6
+# suites 0
+# pass 6
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 5755.361792
