@@ -1,4 +1,4 @@
-// 격리된 테스트 확장에서 help 예제와 브라우저 동작을 확인한다. 모델 평가는 별도다.
+// 격리된 테스트 확장에서 원본 문서 조회와 브라우저 회귀를 확인한다. 모델 평가는 별도다.
 import fs from "node:fs/promises";
 import http from "node:http";
 import path from "node:path";
@@ -7,7 +7,13 @@ import { fileURLToPath } from "node:url";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
 import { startBroker } from "../bridge/daemon.mjs";
-import { QUICKSTART_EXAMPLES } from "../bridge/help-content.mjs";
+// 자동 시험 전용 입력이며 에이전트 help에는 포함하지 않는다.
+const QUICKSTART_EXAMPLES = {
+  discover: "nodeRepl.write(await agent.browsers.list());",
+  open: 'var browser = await agent.browsers.get("BROWSER_ID_FROM_LIST");\nvar tab = await browser.tabs.new();\nawait tab.goto("https://www.naver.com/");\nawait tab.getAXState();',
+  full: "await tab.getAXState({ disableDiffing: true });",
+  screenshot: "await tab.getScreenshot();",
+};
 
 const secret = process.env.BROWSER_BRIDGE_LIVE_TOKEN ?? "integration-test-only";
 const broker = await startBroker({ port: 29651, secret });
@@ -50,12 +56,15 @@ const transport = new StreamableHTTPClientTransport(
 const report = {
   date: new Date().toISOString(),
   purpose:
-    "Guide examples through real MCP and isolated Chrome; not an external-model evaluation",
+    "Original documentation lookup and browser regression through real MCP and isolated Chrome; not an external-model evaluation",
   results: [],
 };
 const created = [];
 let browserId;
-const output = new URL("../docs/validation/help-live.json", import.meta.url);
+const output = new URL(
+  "../docs/validation/original-help-live.json",
+  import.meta.url,
+);
 async function record(name, tool, args, check = () => {}) {
   const result = await client.callTool(
     { name: tool, arguments: args },
@@ -147,8 +156,8 @@ try {
   );
   const fixtureId = lastJson(fixtureSetup).id;
   created.push(fixtureId);
-  await record("exact facade API guide", "browser_help", {
-    api: "tab.setValue",
+  await record("original AX API declaration", "browser_help", {
+    api: "tab.ax.setValue",
   });
   const observed = await run("fresh full AX", QUICKSTART_EXAMPLES.full);
   const nameId = inputId(texts(observed)[0], "Name");

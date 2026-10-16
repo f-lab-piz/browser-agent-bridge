@@ -159,3 +159,38 @@ help 독립성·오류·API 문서·세션 유지·출력·MIME 및 README 생�
 ### Next Actions
 
 PR을 main에 병합하고 연결 이슈·milestone을 닫은 뒤 v0.3.0 태그를 push한다. 사용자는 MCP 프로그램을 재시작하고 클라이언트의 도구 목록·instructions를 새로 읽는다.
+
+## 2026-10-16 0.3.1 원본 가이드만 제공
+
+### Plan Input
+
+사용자 “너가 넣은건 빼줘.. 그냥 원래 있던것만 넣어줘 가이드는”. 0.3.0은 PR #6으로 main에 병합되고 태그도 push된 상태였으므로 기존 이력을 바꾸지 않고 0.3.1로 수정한다. `planning/index.md`, `planning/log.md`, [이슈 #7](https://github.com/f-lab-piz/browser-agent-bridge/issues/7).
+
+### Implemented
+
+- 자체 workflow·quickstart 예제·Playwright 선택 요약·facade 설명·API 보충 설명을 help에서 제거했다. 실행 오류에 붙이던 자체 복구 안내도 제거했다.
+- help 본문은 보관된 원본 Markdown 28개를 수정·요약·문구 추가 없이 반환한다. 기본 응답은 `accessibility.md`이고 문서명별 조회와 `documents` 색인을 제공한다.
+- 기존 topic은 원본 문서에 대한 별칭으로 유지한다. 서버 metadata와 README는 조회 경로만 안내하며 API 상세는 원본 manifest의 선언·참조형만 반환한다.
+- 자체 facade API는 실행에서 유지한다. 원본 명세에 없는 이름의 API help는 새 설명을 만들지 않고 원본 API 색인으로 연결한다.
+- 버전·설계·구현 현황을 갱신하고 이전 자체 가이드 검증 기록은 과거 결과로 표시했다. live 회귀 스크립트의 테스트 입력은 에이전트 가이드와 분리했다.
+
+### Test Coverage
+
+원본 문서 28개 전체의 help content와 원문 문자 단위 일치, ORIGIN SHA-256 일치, 기본/별칭 문서 선택, 잘못된 이름·경로·prototype 이름 거절, 원본 API 및 참조형, Worker 미기동·변수 유지·SDK 실패 후 help, 오류 원문 유지·추가 가이드 없음, JPEG/PNG MIME, README 조회 경로 일치, HTTP·실제 stdio 응답 일치와 기존 회귀를 확인했다.
+
+### Test Command and Result
+
+- `npm test`: 22 passed, 0 failed (Node 25.2.1, 서버 0.3.1).
+- `PATH=/opt/homebrew/opt/node@22/bin:$PATH npm test`: 22 passed, 0 failed (Node 22.21.1). `docs/validation/original-help-unit-node22.txt`.
+- `node scripts/update-help-readme.mjs --check`: 성공.
+- `node --check scripts/live-help.mjs`: 성공.
+- `git diff --check`: 통과.
+- `git diff --name-only -- sdk extension vendor/openai`: 변경 없음.
+
+### Decisions
+
+문서 전달 장치와 호출 metadata는 유지하고 사용 가이드의 본문만 원본에 한정한다. 원본 앱 전용 설명을 브릿지 신규 기능으로 주장하지 않으며 기존 호환성 문서에서 실제 지원 범위를 구분한다. 추가 의존성·원본 수정·새 모델 평가는 없다. Chrome 실행 코드는 바뀌지 않았으므로 이번 변경에 Chrome 시험을 반복하지 않았다.
+
+### Next Actions
+
+PR 병합 후 v0.3.1 태그를 push한다. 사용자는 MCP 프로그램을 재시작하고 도구 목록·instructions를 새로 읽는다. 원본 문서의 AX 우선 기준은 그대로 전달된다.

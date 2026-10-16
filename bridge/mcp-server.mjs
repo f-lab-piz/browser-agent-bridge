@@ -4,7 +4,7 @@ import packageInfo from "../package.json" with { type: "json" };
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 import { JsExecutor } from "./executor.mjs";
-import { getHelp, recoveryHint } from "./help.mjs";
+import { getHelp } from "./help.mjs";
 import {
   SERVER_INSTRUCTIONS,
   JS_DESCRIPTION,
@@ -65,11 +65,8 @@ export function createBrowserMcp({
             };
           return { type: "text", text: x.text ?? JSON.stringify(x) };
         });
-        if (r.error) {
-          content.push({ type: "text", text: r.error });
-          const hint = recoveryHint(r.error);
-          if (hint) content.push({ type: "text", text: hint });
-        } else if (!content.length && r.result.type !== "undefined")
+        if (r.error) content.push({ type: "text", text: r.error });
+        else if (!content.length && r.result.type !== "undefined")
           content.push({
             type: "text",
             text:
@@ -80,12 +77,8 @@ export function createBrowserMcp({
         if (!content.length) content.push({ type: "text", text: "undefined" });
         return { content, isError: !!r.error };
       } catch (e) {
-        const hint = recoveryHint(e.message);
         return {
-          content: [
-            { type: "text", text: e.message },
-            ...(hint ? [{ type: "text", text: hint }] : []),
-          ],
+          content: [{ type: "text", text: e.message }],
           isError: true,
         };
       }
@@ -115,7 +108,7 @@ export function createBrowserMcp({
           .max(80)
           .optional()
           .describe(
-            `Guide topic: ${HELP_TOPICS.join(", ")}. Defaults to quickstart, or api when api is given.`,
+            `Original document name or alias: ${HELP_TOPICS.join(", ")}. Defaults to quickstart, or api when api is given.`,
           ),
         api: z
           .string()
@@ -123,7 +116,7 @@ export function createBrowserMcp({
           .max(160)
           .optional()
           .describe(
-            "Exact JavaScript API or namespace, e.g. tab.getAXState or tab.playwright. Use alone or with topic:api.",
+            "Exact original JavaScript API or namespace, e.g. tab.ax.click or tab.playwright. Use alone or with topic:api.",
           ),
       },
       annotations: {

@@ -1,5 +1,14 @@
 # 변경 기록
 
+## 0.3.1 — 2026-10-16
+
+- 사용자 요청에 따라 help의 자체 사용 전략·예제·facade 설명·오류 복구 가이드를 제거했다. 서버 metadata에는 문서 조회 경로만 남겼다.
+- `browser_help({})`는 원본 `accessibility.md`를 그대로 반환한다. 원본 문서 28개는 문서명으로 조회하며 `topic:"documents"`에서 목록을 확인한다. 원문에 있는 AX·Playwright 사용 기준을 수정·요약하지 않는다.
+- API 상세는 원본 manifest의 선언과 참조형만 반환한다. 자체 facade는 실행에서 유지하지만 help에 새 설명을 붙이지 않으며, API 조회는 `tab.ax.*` 등 원본 이름을 사용한다.
+- 원본 파일·ORIGIN 해시·SDK·WASM·확장은 변경하지 않았다. help 응답은 원문과 문자 단위로 대조하고 SHA-256도 검증한다.
+
+검증: Node 25.2.1 및 Node 22.21.1에서 자동 테스트 22개 통과. README 생성 검사·diff 검사와 실제 stdio/HTTP 응답 일치를 포함한다. [Node 22 출력](docs/validation/original-help-unit-node22.txt). 이 버전에서는 Chrome 시험을 새로 수행하지 않았다. 0.3.0의 Chrome 기록은 당시 자체 가이드 검증으로 보존한다. 적용하려면 MCP 프로그램을 재시작하고 도구 목록·instructions를 새로 읽는다.
+
 ## 0.3.0 — 2026-10-16
 
 - `browser_help({topic?, api?})` 추가: quickstart·ax·session·output·troubleshooting·api와 API 색인·상세를 Chrome·Worker 없이 조회한다.

@@ -12,7 +12,7 @@
 
 `cli.mjs`는 전송 방식과 포트만 선택합니다. `mcp-server.mjs`가 `browser_js`, `browser_js_reset`, `browser_help`와 JS 세션을 공통 생성하고, HTTP는 MCP 세션마다 생성하며 stdio는 자식 프로세스당 하나를 생성합니다. 원본 SDK·핸들러·AX WASM은 양쪽에서 동일합니다.
 
-`browser_help`는 로컬 가이드와 API manifest만 읽으며 JS Worker나 Chrome을 시작하지 않습니다. `help-content.mjs`의 공통 안내를 서버 instructions·도구 설명·주제별 help·README 생성에 사용합니다. 알려진 실행 오류에는 관련 help 호출을 별도 text로 추가하고, 원본 오류와 기존 성공 응답을 유지합니다. 이미지 응답의 MIME은 공통 MCP 경계에서 JPEG·PNG 바이트 서명과 맞춥니다.
+`browser_help`는 보관된 원본 Markdown과 API manifest만 읽으며 JS Worker나 Chrome을 시작하지 않습니다. 기본 응답은 원본 `accessibility.md`이고, 문서명별 원문 조회와 원본 API 색인·상세를 제공합니다. 본문을 요약하거나 자체 전략·예제를 덧붙이지 않습니다. 서버 instructions·도구 설명에는 문서 조회 경로만 남기고 실행 오류의 자체 복구 안내는 제거했습니다. 이미지 응답의 MIME은 공통 MCP 경계에서 JPEG·PNG 바이트 서명과 맞춥니다.
 
 각 MCP 프로그램이 내부 RPC와 확장 WebSocket endpoint를 같은 프로세스에서 제공합니다. stdio 모드에서는 외부 `/mcp`를 열지 않습니다. 별도 중계 프로세스가 없으며 Python은 선택 사항입니다. Worker는 스레드이므로 별도 중계 프로세스에 해당하지 않습니다.
 
