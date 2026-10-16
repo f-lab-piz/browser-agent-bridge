@@ -15,3 +15,7 @@
 
 - 상세 계획: [범용 에이전트 help 보완](spec-agent-help.md)
 - 상태: 구현 및 자동·실제 Chrome 예제 검증 완료. 외부 에이전트별 성공률 평가는 후속 작업.
+
+## 2026-10-16 변경 방향: 원본 가이드만 제공
+
+사용자 요청에 따라 0.3.1부터 위 help의 자체 workflow·예제·facade 설명·오류 복구 안내를 제거한다. help는 원본 문서 28개를 그대로 반환하고 API 선언은 원본 manifest만 조회한다. 서버 metadata와 README에는 문서 선택 방법만 남긴다. 원문에 이미 있는 AX 우선·다른 API 선택 기준을 다시 요약하지 않는다. [이슈 #7](https://github.com/f-lab-piz/browser-agent-bridge/issues/7).

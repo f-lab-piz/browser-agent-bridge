@@ -1,0 +1,148 @@
+
+> browser-agent-bridge@0.3.1 test
+> node --test --test-concurrency=1 tests/*.test.mjs
+
+TAP version 13
+# Subtest: HTTP 인증·탭 lease·반납·업로드 차단
+ok 1 - HTTP 인증·탭 lease·반납·업로드 차단
+  ---
+  duration_ms: 32.020416
+  type: 'test'
+  ...
+# Subtest: hello 없는 WebSocket과 HTTP 선연결도 종료 시 정리한다
+ok 2 - hello 없는 WebSocket과 HTTP 선연결도 종료 시 정리한다
+  ---
+  duration_ms: 5.1415
+  type: 'test'
+  ...
+# Subtest: 여러 stdio 동시 첫 실행도 같은 완성된 토큰을 읽는다
+ok 3 - 여러 stdio 동시 첫 실행도 같은 완성된 토큰을 읽는다
+  ---
+  duration_ms: 11.447166
+  type: 'test'
+  ...
+# Subtest: 확장 발견 주소: 중복 제거·원격 URL 자동 스캔 금지·명시적 해제
+ok 4 - 확장 발견 주소: 중복 제거·원격 URL 자동 스캔 금지·명시적 해제
+  ---
+  duration_ms: 0.892625
+  type: 'test'
+  ...
+# Subtest: 확장 연결 pool: 복수 연결·요청 라우팅·이벤트 전송·종료 해제
+ok 5 - 확장 연결 pool: 복수 연결·요청 라우팅·이벤트 전송·종료 해제
+  ---
+  duration_ms: 2.621792
+  type: 'test'
+  ...
+# Subtest: 자동 발견은 같은 비밀·포트를 가진 브로커만 연결한다
+ok 6 - 자동 발견은 같은 비밀·포트를 가진 브로커만 연결한다
+  ---
+  duration_ms: 140.425583
+  type: 'test'
+  ...
+# Subtest: 확장 Native API: 탭·CDP session·history·미지원 명령 오류
+ok 7 - 확장 Native API: 탭·CDP session·history·미지원 명령 오류
+  ---
+  duration_ms: 3.0235
+  type: 'test'
+  ...
+# Subtest: 확장 전역 탭 lease: 서로 다른 프로세스 거절, reset·disconnect 후 반납
+ok 8 - 확장 전역 탭 lease: 서로 다른 프로세스 거절, reset·disconnect 후 반납
+  ---
+  duration_ms: 0.366583
+  type: 'test'
+  ...
+# Subtest: 탭 생성 응답 전에 연결이 끊겨도 사용권이 남지 않는다
+ok 9 - 탭 생성 응답 전에 연결이 끊겨도 사용권이 남지 않는다
+  ---
+  duration_ms: 0.134458
+  type: 'test'
+  ...
+# Subtest: help는 SDK·Chrome 없이 실행되고 Worker를 시작하지 않는다
+ok 10 - help는 SDK·Chrome 없이 실행되고 Worker를 시작하지 않는다
+  ---
+  duration_ms: 20.609625
+  type: 'test'
+  ...
+# Subtest: help 입력 오류에는 유효한 다음 호출을 안내한다
+ok 11 - help 입력 오류에는 유효한 다음 호출을 안내한다
+  ---
+  duration_ms: 0.277875
+  type: 'test'
+  ...
+# Subtest: API 색인은 원본 manifest의 인자·참조형만 반환한다
+ok 12 - API 색인은 원본 manifest의 인자·참조형만 반환한다
+  ---
+  duration_ms: 0.296291
+  type: 'test'
+  ...
+# Subtest: help는 기존 출력·변수·세션을 유지하고 오류에 자체 가이드를 추가하지 않는다
+ok 13 - help는 기존 출력·변수·세션을 유지하고 오류에 자체 가이드를 추가하지 않는다
+  ---
+  duration_ms: 366.034459
+  type: 'test'
+  ...
+# Subtest: 모든 원본 문서 응답은 보관된 원문과 같고 출처 해시를 보존한다
+ok 14 - 모든 원본 문서 응답은 보관된 원문과 같고 출처 해시를 보존한다
+  ---
+  duration_ms: 5.168709
+  type: 'test'
+  ...
+# Subtest: README의 문서 조회 경로는 metadata와 일치한다
+ok 15 - README의 문서 조회 경로는 metadata와 일치한다
+  ---
+  duration_ms: 0.792666
+  type: 'test'
+  ...
+# Subtest: HTTP MCP의 JavaScript 변수 유지와 에이전트 세션 격리
+ok 16 - HTTP MCP의 JavaScript 변수 유지와 에이전트 세션 격리
+  ---
+  duration_ms: 576.641584
+  type: 'test'
+  ...
+# Subtest: SDK loader rejects traversal and mismatched artifact hashes
+ok 17 - SDK loader rejects traversal and mismatched artifact hashes
+  ---
+  duration_ms: 21.158125
+  type: 'test'
+  ...
+# Subtest: bundled SDK는 별도 호스트 없이 실행된다
+ok 18 - bundled SDK는 별도 호스트 없이 실행된다
+  ---
+  duration_ms: 61.5445
+  type: 'test'
+  ...
+# Subtest: 원격 SDK도 manifest와 해시를 검증하여 로드한다
+ok 19 - 원격 SDK도 manifest와 해시를 검증하여 로드한다
+  ---
+  duration_ms: 5.423792
+  type: 'test'
+  ...
+# (node:69951) ExperimentalWarning: WASI is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: 생성된 런타임이 원본 전체와 동일한 prefix를 보존
+ok 20 - 생성된 런타임이 원본 전체와 동일한 prefix를 보존
+  ---
+  duration_ms: 9.288541
+  type: 'test'
+  ...
+# Subtest: 원본 DOM/AX 정규화와 WASM은 독립 실행 가능
+ok 21 - 원본 DOM/AX 정규화와 WASM은 독립 실행 가능
+  ---
+  duration_ms: 119.687542
+  type: 'test'
+  ...
+# Subtest: 실제 stdio 자식 프로세스: bundled SDK·상태 유지·HTTP와 도구 동일·복수 포트·EOF 정리
+ok 22 - 실제 stdio 자식 프로세스: bundled SDK·상태 유지·HTTP와 도구 동일·복수 포트·EOF 정리
+  ---
+  duration_ms: 757.030042
+  type: 'test'
+  ...
+1..22
+# tests 22
+# suites 0
+# pass 22
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 4461.917541

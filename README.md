@@ -2,7 +2,7 @@
 
 호환성 연구용 Chrome 확장 + MCP 프로그램입니다. HTTP와 stdio가 같은 브라우저 툴·JavaScript 실행부를 사용합니다. 원본 JS/WASM을 포함하며 원본과 직접 작성한 어댑터를 구분합니다.
 
-현재 버전은 **0.3.0**입니다. [변경 기록](CHANGELOG.md)에서 추가 기능과 검증 범위를 확인할 수 있습니다.
+현재 버전은 **0.3.1**입니다. [변경 기록](CHANGELOG.md)에서 추가 기능과 검증 범위를 확인할 수 있습니다.
 
 | 방식  | 실행 주체                            | 에이전트 연결          | 확장 연결                      |
 | ----- | ------------------------------------ | ---------------------- | ------------------------------ |
@@ -79,52 +79,19 @@ npm run mcp:http
 여러 HTTP 클라이언트와 여러 stdio 프로세스를 함께 사용할 수 있습니다. 다른 머신에서는 SSH 터널 등으로 loopback 주소에 연결하세요. 기본 인터넷 공개 바인딩은 제공하지 않습니다.
 
 <!-- browser-help:start -->
-## 에이전트 시작 안내
+## 에이전트 문서 조회
 
-별도 스킬 없이 MCP 도구 `browser_help`로 사용법을 읽습니다. HTTP·stdio 모두 `browser_js`, `browser_js_reset`, `browser_help`를 제공합니다. help는 Chrome·Worker 없이 응답하고 JavaScript 변수를 바꾸지 않습니다.
+HTTP·stdio 모두 `browser_js`, `browser_js_reset`, `browser_help`를 제공합니다. help는 Chrome·Worker 없이 원본 문서를 읽으며 JavaScript 변수를 바꾸지 않습니다.
 
-MCP 호출 예: `browser_help({})`, `browser_help({topic:"ax"})`, `browser_help({api:"tab.getAXState"})`.
+help 본문은 `vendor/openai/26.928.21956/docs/`의 원문을 수정·요약 없이 반환합니다. 자체 사용 전략·예제·복구 가이드는 추가하지 않습니다. 원본 앱 전용 설명이 포함되어 있으므로 브릿지의 실제 지원 범위는 [호환성 문서](docs/compatibility.md)를 확인하세요.
 
-### Start here
+- `browser_help({})`: 원본 `accessibility.md`.
+- `browser_help({topic:"documents"})`: 원본 문서 색인.
+- `browser_help({topic:"api-use-behavior"})`: 해당 원문.
+- `browser_help({topic:"api"})`: 원본 SDK API 색인.
+- `browser_help({api:"tab.ax.click"})`: 원본 API 선언과 참조형.
 
-Call MCP tool browser_js with a code string containing the examples below. These are JavaScript APIs, not separate MCP tools. No imports or runtime setup are needed.
-
-agent, cua and nodeRepl are already bound. Top-level await is supported. Variables persist only within this MCP session; reuse bindings. A reset, timeout reset or new MCP session clears them.
-
-1. Discover paired browsers; this first example is ready to run:
-
-```javascript
-nodeRepl.write(await agent.browsers.list());
-```
-
-If the list is empty, read browser_help({topic:"troubleshooting"}) and check pairing. Do not invent an ID. If several browsers appear, choose the requested one. The chrome alias is safe only when exactly one extension is connected.
-
-2. In the next browser_js call, replace BROWSER_ID_FROM_LIST with an actual returned ID before running:
-
-```javascript
-var browser = await agent.browsers.get("BROWSER_ID_FROM_LIST");
-var tab = await browser.tabs.new();
-await tab.goto("https://www.naver.com/");
-await tab.getAXState();
-```
-
-Observe the current AX state, choose a target from it, act, then read fresh AX to verify the result. Stop when the requested result is verified.
-
-3. Reuse browser and tab in later calls. For a fresh complete tree:
-
-```javascript
-await tab.getAXState({ disableDiffing: true });
-```
-
-getAXState() already emits AX text. Do not wrap it in nodeRepl.write unless using {emit:false}. Select action indices from the observed tree; help never supplies a reusable page index.
-
-Use nodeRepl.write(value) for explicit text and await nodeRepl.emitImage(bytes) for images. Emitted outputs suppress the last expression's automatic result. With no emitted output, the last expression is returned; assignments may return undefined.
-
-This bridge controls paired Chrome extensions. It does not provide Codex IAB, native apps, tab mention URLs, account/approval UI, or automatic end-of-turn tab cleanup. markDeliverable/markHandoff store marks only; explicitly close disposable tabs.
-
-For exact arguments use browser_help({api:"tab.getAXState"}); for a namespace use browser_help({api:"tab.playwright"}). browser.documentation() remains the original SDK reference, not this facade guide.
-
-다른 주제: `browser_help({topic:"session"})`, `browser_help({topic:"output"})`, `browser_help({topic:"troubleshooting"})`, `browser_help({topic:"api"})`.
+기존 topic 별칭: `quickstart`·`ax` → `accessibility`, `session` → `api-use-behavior`, `output` → `screenshots`, `troubleshooting` → `browser-troubleshooting`. 자체 facade 설명 대신 원본 `tab.ax.*` API를 조회합니다.
 <!-- browser-help:end -->
 
 세션별로 변수·SDK 컨텍스트를 분리합니다. 같은 탭을 다른 에이전트가 사용하면 명시적으로 거절합니다. `browser_js_reset`, HTTP MCP DELETE, stdio 종료로 사용권을 반납합니다. HTTP의 일시적인 TCP 연결 종료만으로 세션이 종료되지는 않습니다. timeout이나 연결 끊김 직전에 동작이 이미 실행됐을 수 있으므로 재시도 전 새 상태를 확인하세요.
@@ -160,7 +127,7 @@ Python이 29652를 사용하면 stdio는 다음 빈 포트를 선택합니다. J
 | ----------------------- | --------------------------------------- |
 | `bridge/cli.mjs`        | HTTP·stdio 선택과 프로세스 수명         |
 | `bridge/mcp-server.mjs` | 공통 MCP 툴·지속 JS 실행                |
-| `bridge/help.mjs`, `bridge/help-content.mjs` | Worker 없이 읽는 help·API 색인·공통 가이드 |
+| `bridge/help.mjs`, `bridge/help-content.mjs` | Worker 없이 읽는 원본 문서·API 색인 |
 | `bridge/daemon.mjs`     | 프로세스 내부 확장/RPC 연결, HTTP 세션  |
 | `extension/`            | 복수 연결·전역 탭 사용권·Chrome API/CDP |
 | `sdk/`                  | 기본 JS/WASM, 원격 배포 가능            |
@@ -169,6 +136,6 @@ Python이 29652를 사용하면 stdio는 다음 빈 포트를 선택합니다. J
 
 `npm test`는 별도 Chrome/Python 없이 실행합니다. 실제 Chrome 혼용 시험은 `node scripts/live-dual-transport.mjs`이며 별도 테스트 확장 준비 후 실행합니다. 상세 절차와 원시 결과는 [HTTP·stdio 검증](docs/dual-transport.md)에 있습니다.
 
-help 내용을 바꾸면 `node scripts/update-help-readme.mjs`로 README의 생성 구역을 갱신합니다. `node scripts/update-help-readme.mjs --check`와 `npm test`에서 일치 여부를 확인합니다. 기존 MCP 프로그램을 다시 시작하고 클라이언트에서 도구 목록을 새로 읽으면 추가된 `browser_help`와 안내 metadata가 반영됩니다. 이번 변경만으로 확장 재설치는 필요하지 않습니다.
+문서 조회 경로를 바꾸면 `node scripts/update-help-readme.mjs`로 README의 생성 구역을 갱신합니다. `node scripts/update-help-readme.mjs --check`와 `npm test`에서 일치 여부를 확인합니다. 원본 문서 응답 28개는 원문·출처 해시와 대조합니다. 기존 MCP 프로그램을 다시 시작하고 클라이언트에서 도구 목록을 새로 읽으면 변경이 반영됩니다. 이번 변경만으로 확장 재설치는 필요하지 않습니다.
 
 [API별 검증 대조표](docs/compatibility.md) · [설계](docs/architecture.md) · [원본 출처](vendor/README.md) · [원본 조사](docs/reverse-engineering-report.txt)

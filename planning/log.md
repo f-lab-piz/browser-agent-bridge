@@ -25,3 +25,7 @@
 ## 2026-10-16: 0.3.0 정리 및 GitHub 반영
 
 사용자 “지금까지한 버전으로 정리해서 깃헙 푸시해줘” 요청에 따라 현재 help 구현과 검증 기록을 0.3.0으로 묶는다. [이슈 #5](https://github.com/f-lab-piz/browser-agent-bridge/issues/5), milestone `v0.3.0`, `feat/5-agent-help` 브랜치로 관리하고 PR을 통해 main에 반영한 뒤 같은 버전 태그를 push한다. 원본 출처·해시·과거 시험 결과를 유지하며, 현재 공개 상태와 버전 문서만 맞춘다. 새 브라우저 기능이나 외부 모델 평가는 범위에 넣지 않는다.
+
+## 2026-10-16: 자체 가이드 제거 요청
+
+0.3.0은 [PR #6](https://github.com/f-lab-piz/browser-agent-bridge/pull/6)으로 main에 병합하고 `v0.3.0` 태그를 push했다. 사용자가 “너가 넣은건 빼줘.. 그냥 원래 있던것만 넣어줘 가이드는”이라고 추가 지시하여 0.3.1로 후속 반영한다. 자체 전략·예제·facade 설명·오류 복구 문구를 제거하고 원본 Markdown 28개를 그대로 조회하게 한다. 원문 `accessibility.md`에 이미 있는 AX 우선·효율적인 다른 API 선택 기준은 수정하지 않는다. [이슈 #7](https://github.com/f-lab-piz/browser-agent-bridge/issues/7), milestone `v0.3.1`, 브랜치 `fix/7-original-help-guides`.

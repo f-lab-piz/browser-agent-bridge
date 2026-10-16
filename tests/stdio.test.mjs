@@ -67,11 +67,11 @@ test("실제 stdio 자식 프로세스: bundled SDK·상태 유지·HTTP와 도�
     assert.deepEqual(
       await a.client.callTool({
         name: "browser_help",
-        arguments: { api: "tab.getAXState" },
+        arguments: { topic: "accessibility" },
       }),
       await httpClient.callTool({
         name: "browser_help",
-        arguments: { api: "tab.getAXState" },
+        arguments: { topic: "accessibility" },
       }),
     );
     let r = await call(

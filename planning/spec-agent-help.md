@@ -2,6 +2,8 @@
 
 작성일: 2026-10-15
 
+2026-10-16 변경: 아래는 0.3.0의 이전 계획이다. 사용자 요청에 따라 0.3.1에서는 자체 사용 가이드·예제·facade 설명·오류 복구 안내를 제거하고 보관된 원본 Markdown만 그대로 제공한다. 원본 manifest 기반 API 조회와 최소 문서 선택 metadata는 유지한다. 현재 방향은 `planning/index.md`, 결과는 `implementation/log.md` 참조.
+
 상태: 2026-10-15 사용자 시작 지시 후 구현·프로토콜·실제 Chrome 예제 검증 완료. 외부 에이전트별 작업 성공률 평가는 후속 작업. 상세 결과는 `implementation/log.md` 참조.
 
 ## Problem
