@@ -22,8 +22,12 @@ test("HTTP MCP의 JavaScript 변수 유지와 에이전트 세션 격리", async
     const tools = await a.listTools();
     assert.deepEqual(
       tools.tools.map((t) => t.name),
-      ["browser_js", "browser_js_reset"],
+      ["browser_js", "browser_js_reset", "browser_help"],
     );
+    assert.match(a.getInstructions(), /browser_help/);
+    const help = await a.callTool({ name: "browser_help", arguments: {} });
+    assert.equal(help.isError, false);
+    assert.equal(help.structuredContent.topic, "quickstart");
     let r = await a.callTool({
       name: "browser_js",
       arguments: {
