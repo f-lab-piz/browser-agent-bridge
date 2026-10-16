@@ -63,6 +63,17 @@ test("실제 stdio 자식 프로세스: bundled SDK·상태 유지·HTTP와 도�
       (await a.client.listTools()).tools,
       (await httpClient.listTools()).tools,
     );
+    assert.equal(a.client.getInstructions(), httpClient.getInstructions());
+    assert.deepEqual(
+      await a.client.callTool({
+        name: "browser_help",
+        arguments: { api: "tab.getAXState" },
+      }),
+      await httpClient.callTool({
+        name: "browser_help",
+        arguments: { api: "tab.getAXState" },
+      }),
+    );
     let r = await call(
       a.client,
       "const number=await Promise.resolve(7);number*6",

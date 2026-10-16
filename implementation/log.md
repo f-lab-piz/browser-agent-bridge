@@ -82,3 +82,80 @@ MCP transport를 공통 실행부에서 분리하고 Node 프로세스 자체에
 ### Next Actions
 
 확장을 새로고침하고 `--pair` 토큰을 저장한 뒤 README의 HTTP 또는 stdio MCP 설정을 적용한다. 추가 앱/브라우저 버전 호환성은 별도 시험으로 기록한다.
+
+## 2026-10-15 범용 에이전트 help 보완
+
+### Plan Input
+
+`planning/spec-agent-help.md`, `planning/index.md`, `planning/log.md`. 사용자 요청: 범용 help 중심 보완 계획을 구현하라는 “시작해”. 구현 도중 help의 출처를 질문받아, 기존 안내를 그대로 복제하지 않고 실제 브릿지 동작에 맞게 작성하며 API 선언만 기존 manifest에서 조회함을 설명했다.
+
+### Implemented
+
+- `browser_help({topic?, api?})`: quickstart·ax·session·output·troubleshooting·api. 인자 없는 시작 안내, namespace 색인과 정확한 API 조회, 잘못된 topic/API와 입력 충돌 안내.
+- `help-content.mjs`의 공통 가이드·facade 설명·실행 예제를 직접 작성. 원본 `sdk/api.json`의 공개 extension API 선언과 매개변수 참조형은 그대로 조회한다. 앱 전용 동작과 다른 부분은 해당 API 조회에도 보충한다.
+- help는 SDK 코드를 실행하지 않고 Worker·브라우저 없이 로컬 문서를 반환한다. 서버·bundled SDK 버전과 원격 SDK 적용 범위를 명시한다.
+- 공통 MCP 팩토리에 서버 instructions와 도구 description을 연결하고 알려진 오류에 별도 help 연결 text를 추가. 기존 성공 text·변수·reset 계약과 원본 오류 설명을 유지한다.
+- `scripts/update-help-readme.mjs`로 동일 원본에서 README 구역을 생성하고 테스트에서 일치 여부를 확인한다.
+- `scripts/live-help.mjs`로 실제 가이드 예제를 격리된 Chrome 확장에서 검증하고 생성한 탭만 정리한다.
+- 이미지 예제 검증 중 JPEG 바이트(`ffd8ff`)를 `image/png`로 내보내던 기존 불일치를 발견했다. 원본 SDK/WASM은 변경하지 않고 공통 MCP 경계에서 JPEG·PNG 서명을 확인하여 정확한 MIME으로 반환한다.
+
+### Test Coverage
+
+- Chrome·원격 SDK 연결 없이 help 호출 및 Worker 미기동, 모든 topic·버전 표시·quickstart 분량 상한.
+- 오류/누락/충돌 입력과 유효한 다음 호출 안내, 원본 manifest 및 자체 facade API의 문서 범위, 매개변수 참조형과 실제 구현 차이 설명.
+- help 전후 변수·Worker 유지, 출력이 있으면 마지막 표현식 생략, 원본 오류·선행 출력 보존, unknown 오류 무변경, timeout/reset 뒤 help 및 SDK 로딩 실패 뒤 help.
+- JPEG/PNG의 MCP MIME 보정, README 생성 일치, HTTP·stdio 도구·instructions·help 응답 동일.
+- 기존 인증·발견·탭 lease·세션 격리·EOF·SDK 해시/경로·원본 prefix/WASM 검증 유지.
+- 실제 Chrome for Testing 155.0.8059.79에서 22개 가이드 흐름 확인: 시작 조회, 로컬 fixture AX·입력·diff/full·이미지, facade의 출력 차이, help 전후 변수·탭 유지, reset 후 기존 탭 재연결, 네이버의 관찰된 검색창에 입력 후 검색 결과 URL·검색어 확인.
+
+### Test Command and Result
+
+- `npm test`: 22 passed, 0 failed (Node 25.2.1).
+- `PATH=/opt/homebrew/opt/node@22/bin:$PATH npm test`: 22 passed, 0 failed. 출력: `docs/validation/help-unit-node22.txt`.
+- `node scripts/update-help-readme.mjs --check`: 성공.
+- `BROWSER_BRIDGE_LIVE_TOKEN=<격리된 테스트 토큰> node scripts/live-help.mjs`: 22/22 흐름 통과. 원시 입력/응답과 이미지 MIME·바이트 서명: `docs/validation/help-live.json`.
+- `git diff --check`: 통과.
+
+테스트용 Chrome은 이전 AX 측정에서 생성한 별도 프로필을 재사용했으며 개인 Chrome 프로필은 조작하지 않았다. 첫 이미지 검증에서 발견된 MIME 문제를 수정한 뒤 전체 실제 흐름을 다시 완료했다. 성공한 예제 실행은 다른 모델의 작업 성공률 측정과 구분한다.
+
+### Decisions
+
+추가 의존성·스킬·새 조작 도구·자동 안내 배너를 도입하지 않았다. SDK·vendor·확장 소스는 변경하지 않았으므로 SDK 빌드를 불필요하게 재생성하지 않았다. help는 임의 원격 SDK까지 설명한다고 주장하지 않는다. 계획 외 MIME 보정은 실제 이미지 예제가 유효한 MCP content를 반환하도록 필요한 최소 수정으로 포함했다. 소스와 검증 기록을 로컬에 남겼으며 커밋·push·릴리스는 실행하지 않았다.
+
+### Next Actions
+
+기존 MCP 프로그램을 재시작하고 클라이언트에서 도구 목록과 instructions를 다시 읽으면 된다. 확장 재설치는 필요 없다. 외부 호스트가 준비되면 새 대화·스킬 없음 조건에서 사용 성공률, 잘못된 API 호출, 복구 횟수, 호출 수와 호스트의 세션/출력 전달을 별도 평가한다.
+
+## 2026-10-16 0.3.0 정리 및 GitHub 반영 준비
+
+### Plan Input
+
+사용자 “지금까지한 버전으로 정리해서 깃헙 푸시해줘”. 기존 `planning/spec-agent-help.md` 구현과 검증 결과를 배포 가능한 저장소 버전으로 정리한다. [이슈 #5](https://github.com/f-lab-piz/browser-agent-bridge/issues/5), milestone `v0.3.0`, 브랜치 `feat/5-agent-help`.
+
+### Implemented
+
+- package.json·lockfile 버전을 0.3.0으로 맞추고 CHANGELOG를 추가했다.
+- README·설계·구현 현황에 세 MCP 도구와 help 동작을 반영했다.
+- GitHub 저장소의 현재 PUBLIC 상태를 확인하여 현재 상태 설명을 맞췄다. 원본 출처·권리 문구와 ORIGIN.json의 당시 확보 목적·해시는 보존했다.
+- 이전 실제 Chrome 결과의 서버 버전 0.2.0은 측정 당시 값으로 유지하고, CHANGELOG에서 버전 변경 전 help 구현의 검증임을 명시했다.
+- 브라우저 실행 코드·SDK·WASM·확장에는 이번 정리 작업으로 추가 변경을 하지 않았다.
+
+### Test Coverage
+
+help 독립성·오류·API 문서·세션 유지·출력·MIME 및 README 생성 일치, HTTP·stdio metadata 일치, 기존 인증·발견·lease·EOF·SDK 무결성 회귀를 재검증했다. 실제 Chrome 시험은 2026-10-15의 22/22 기록을 보존한다.
+
+### Test Command and Result
+
+- `npm test`: 22 passed, 0 failed (Node 25.2.1, 서버 0.3.0).
+- `PATH=/opt/homebrew/opt/node@22/bin:$PATH npm test`: 22 passed, 0 failed (Node 22.21.1, 서버 0.3.0). `docs/validation/help-unit-node22.txt` 갱신.
+- `node scripts/update-help-readme.mjs --check`: 성공.
+- `git diff --check`: 통과.
+- `ssh -T git@f-lab-piz`: f-lab-piz 계정 인증 성공 메시지 확인. GitHub shell 미지원에 따른 종료 코드 1.
+
+### Decisions
+
+기존 구현 전체와 필요한 문서·버전 정리만 한 PR에 포함한다. 새 의존성, 원본 라이선스 부여, 출처 삭제, 외부 모델 성공률 주장은 추가하지 않는다. 위 검증 후 SSH alias remote로 브랜치를 push하고 PR 병합·v0.3.0 태그 반영 결과는 GitHub에서 확인한다.
+
+### Next Actions
+
+PR을 main에 병합하고 연결 이슈·milestone을 닫은 뒤 v0.3.0 태그를 push한다. 사용자는 MCP 프로그램을 재시작하고 클라이언트의 도구 목록·instructions를 새로 읽는다.
